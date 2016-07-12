@@ -1,4 +1,4 @@
-/// <reference path="./../typings/tsd.d.ts" />
+/// <reference path="./../../../typings/tsd.d.ts" />
 import * as express from "express";
 var app = express();
 app.get('/',(req,res)=>{
