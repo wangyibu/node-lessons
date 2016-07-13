@@ -10,6 +10,9 @@
     },
     "angularjs/angular.d.ts": {
       "commit": "de82425735f84a10b43921ae4b1d085b3752a626"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "de82425735f84a10b43921ae4b1d085b3752a626"
     }
   }
 }
