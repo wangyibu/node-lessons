@@ -1,12 +1,14 @@
 /// <reference path="./../typings/tsd.d.ts" />
 import * as express from "express";
 import * as utility from "utility";
-import * as lodash from "lodash";
+import * as _ from "lodash";
 var app = express();
 app.get('/',(req,res)=>{
     var q = req.query.q;
 
-    console.log(_.isDate(new Date()));
+    var ss = _.isDate(new Date());
+
+    console.log("ss:",ss);
 
     var md5Value = utility.md5(q);
     res.send(md5Value);
