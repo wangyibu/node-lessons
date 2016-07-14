@@ -17,7 +17,7 @@ app.get('/', function (req, res, next) {
         var items = [];
         $('#main .topic_title').each(function (index, element) {
             var $element = $(element);
-            // attr href title 
+            // attr href title
             items.push({
                 title: $element.attr('title'),
                 href: $element.attr('href'),
