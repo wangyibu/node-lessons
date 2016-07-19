@@ -1,1 +1,1 @@
-import * as main from '../fibonacci';
+import * as main from '../main';

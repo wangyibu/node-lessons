@@ -1,0 +1,20 @@
+{
+  "name": "lesson2",
+  "description": "学习使用外部模块",
+  "main": "app.js",
+  "authors": [
+    "alsotang <alsotang@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/wangyibu/node-lessons",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap":"3.0.0"
+  }
+}
