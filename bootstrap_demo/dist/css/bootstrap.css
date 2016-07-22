@@ -3978,11 +3978,14 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .breadcrumb:after {
   clear: both;
 }
+.breadcrumb > li.icon-disable:before {
+  content: "";
+}
 .breadcrumb > li:first-child:before {
   content: "";
   color: #1b9ef8;
   font-family: "iconfont" !important;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
@@ -3998,13 +4001,18 @@ textarea.input-group-sm > .input-group-btn > .btn {
   content: "\e663";
   color: #ccc;
   font-family: "iconfont" !important;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
 }
 .breadcrumb > .active {
   color: #999999;
+}
+.gs-breadcrumb {
+  border-radius: 0;
+  background: none;
+  margin-bottom: 0;
 }
 .pagination {
   display: inline-block;
@@ -5886,4 +5894,10 @@ td.visible-print {
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
+}
+.icon-fs18 {
+  font-size: 18px;
+}
+.icon-fs16 {
+  font-size: 16px;
 }
