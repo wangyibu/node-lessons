@@ -1,0 +1,16 @@
+{
+  "name": "bootstrap_demo",
+  "version": "1.0.0",
+  "description": "1. Positioning\r 2. Box model\r 3. Typographic\r 4. Visual\r 5. Misc\r 6. Animation",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "3.9.1",
+    "gulp-less": "3.1.0",
+    "gulp-watch-less":"1.0.1"
+  }
+}
