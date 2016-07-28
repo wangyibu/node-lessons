@@ -1,0 +1,11 @@
+GET https://avatars3.githubusercontent.com/u/14134768?v=3&s=40 HTTP/1.1
+Accept:image/webp,image/*,*/*;q=0.8
+Accept-Encoding:gzip, deflate, sdch, br
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4
+Cache-Control:max-age=0
+Connection:keep-alive
+Host:avatars3.githubusercontent.com
+If-Modified-Since:Sat, 05 Sep 2015 04:11:52 GMT
+If-None-Match:"c00fae92323fa6d527afa0d0e48c76be785c753f"
+Referer:https://github.com/
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
