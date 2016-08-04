@@ -1,0 +1,20 @@
+{
+  "name": "tree_layout",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "王一卜 <wangyibu@gridsum.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/wangyibu/node-lessons",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "3.5.6"
+  }
+}

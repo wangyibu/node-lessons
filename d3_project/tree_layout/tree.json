@@ -1,0 +1,354 @@
+{
+    "name": "根节点",
+    "group": 0,
+    "level": 0,
+    "children": [
+        {
+            "name": "节点(4)",
+            "group": 0,
+            "level": 1,
+            "children": [
+                {
+                    "name": "节点(2)",
+                    "group": 0,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子1",
+                            "group": 0,
+                            "level": 3,
+                            "size": 538
+                        },
+                        {
+                            "name": "叶子2",
+                            "group": 1,
+                            "level": 3,
+                            "size": 441
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(2)",
+                    "group": 1,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子3",
+                            "group": 0,
+                            "level": 3,
+                            "size": 876
+                        },
+                        {
+                            "name": "叶子4",
+                            "group": 1,
+                            "level": 3,
+                            "size": 964
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(2)",
+                    "group": 2,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子5",
+                            "group": 0,
+                            "level": 3,
+                            "size": 240
+                        },
+                        {
+                            "name": "叶子6",
+                            "group": 1,
+                            "level": 3,
+                            "size": 517
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(2)",
+                    "group": 3,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子7",
+                            "group": 0,
+                            "level": 3,
+                            "size": 936
+                        },
+                        {
+                            "name": "叶子8",
+                            "group": 1,
+                            "level": 3,
+                            "size": 861
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "节点(1)",
+            "group": 1,
+            "level": 1,
+            "children": [
+                {
+                    "name": "节点(4)",
+                    "group": 0,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子9",
+                            "group": 0,
+                            "level": 3,
+                            "size": 371
+                        },
+                        {
+                            "name": "叶子10",
+                            "group": 1,
+                            "level": 3,
+                            "size": 234
+                        },
+                        {
+                            "name": "叶子11",
+                            "group": 2,
+                            "level": 3,
+                            "size": 238
+                        },
+                        {
+                            "name": "叶子12",
+                            "group": 3,
+                            "level": 3,
+                            "size": 515
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "节点(5)",
+            "group": 2,
+            "level": 1,
+            "children": [
+                {
+                    "name": "节点(1)",
+                    "group": 0,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子13",
+                            "group": 0,
+                            "level": 3,
+                            "size": 989
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(5)",
+                    "group": 1,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子14",
+                            "group": 0,
+                            "level": 3,
+                            "size": 608
+                        },
+                        {
+                            "name": "叶子15",
+                            "group": 1,
+                            "level": 3,
+                            "size": 945
+                        },
+                        {
+                            "name": "叶子16",
+                            "group": 2,
+                            "level": 3,
+                            "size": 926
+                        },
+                        {
+                            "name": "叶子17",
+                            "group": 3,
+                            "level": 3,
+                            "size": 968
+                        },
+                        {
+                            "name": "叶子18",
+                            "group": 4,
+                            "level": 3,
+                            "size": 141
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(4)",
+                    "group": 2,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子19",
+                            "group": 0,
+                            "level": 3,
+                            "size": 611
+                        },
+                        {
+                            "name": "叶子20",
+                            "group": 1,
+                            "level": 3,
+                            "size": 271
+                        },
+                        {
+                            "name": "叶子21",
+                            "group": 2,
+                            "level": 3,
+                            "size": 486
+                        },
+                        {
+                            "name": "叶子22",
+                            "group": 3,
+                            "level": 3,
+                            "size": 936
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(4)",
+                    "group": 3,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子23",
+                            "group": 0,
+                            "level": 3,
+                            "size": 159
+                        },
+                        {
+                            "name": "叶子24",
+                            "group": 1,
+                            "level": 3,
+                            "size": 887
+                        },
+                        {
+                            "name": "叶子25",
+                            "group": 2,
+                            "level": 3,
+                            "size": 437
+                        },
+                        {
+                            "name": "叶子26",
+                            "group": 3,
+                            "level": 3,
+                            "size": 792
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(2)",
+                    "group": 4,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子27",
+                            "group": 0,
+                            "level": 3,
+                            "size": 893
+                        },
+                        {
+                            "name": "叶子28",
+                            "group": 1,
+                            "level": 3,
+                            "size": 849
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "叶子29",
+            "group": 3,
+            "level": 1,
+            "size": 229
+        },
+        {
+            "name": "节点(3)",
+            "group": 4,
+            "level": 1,
+            "children": [
+                {
+                    "name": "节点(1)",
+                    "group": 0,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子30",
+                            "group": 0,
+                            "level": 3,
+                            "size": 352
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(2)",
+                    "group": 1,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子31",
+                            "group": 0,
+                            "level": 3,
+                            "size": 114
+                        },
+                        {
+                            "name": "叶子32",
+                            "group": 1,
+                            "level": 3,
+                            "size": 316
+                        }
+                    ]
+                },
+                {
+                    "name": "节点(6)",
+                    "group": 2,
+                    "level": 2,
+                    "children": [
+                        {
+                            "name": "叶子33",
+                            "group": 0,
+                            "level": 3,
+                            "size": 974
+                        },
+                        {
+                            "name": "叶子34",
+                            "group": 1,
+                            "level": 3,
+                            "size": 884
+                        },
+                        {
+                            "name": "叶子35",
+                            "group": 2,
+                            "level": 3,
+                            "size": 389
+                        },
+                        {
+                            "name": "叶子36",
+                            "group": 3,
+                            "level": 3,
+                            "size": 846
+                        },
+                        {
+                            "name": "叶子37",
+                            "group": 4,
+                            "level": 3,
+                            "size": 466
+                        },
+                        {
+                            "name": "叶子38",
+                            "group": 5,
+                            "level": 3,
+                            "size": 778
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
