@@ -1,4 +1,4 @@
-module PATTERN {
+module pattern {
 
   export interface Precure {
     getTitle(): string;
@@ -28,4 +28,5 @@ module PATTERN {
   
   var sweetPrecureMovie = new MovieDecorator(new SweetPrecure());
   var smilePrecureMovie = new MovieDecorator(new SmilePrecure());
+  console.log(sweetPrecureMovie,smilePrecureMovie);
 }

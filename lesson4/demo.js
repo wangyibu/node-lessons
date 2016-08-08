@@ -1,3 +1,4 @@
+"use strict";
 var superagent = require("superagent");
 var cheerio = require("cheerio");
 var eventproxy = require('eventproxy');

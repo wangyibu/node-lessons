@@ -8,7 +8,9 @@
     "exclude": [
         "node_modules"
     ],
-    "files": [
-        "Design_Pattern/dector"
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
     ]
 }

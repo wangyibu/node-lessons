@@ -1,3 +1,4 @@
+"use strict";
 var net_1 = require("net");
 var server = net_1.createServer(function (socket) {
     console.log("Connection remoteAddress from : " + socket.remoteAddress);
