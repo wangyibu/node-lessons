@@ -1,14 +1,18 @@
-var PATTERN;
-(function (PATTERN) {
+var mod;
+(function (mod) {
     var SweetPrecure = (function () {
         function SweetPrecure() {
+            this.abc = 123;
         }
+        SweetPrecure.prototype.getValue = function () {
+            return this.abc;
+        };
         SweetPrecure.prototype.getTitle = function () {
             return 'title1';
         };
         return SweetPrecure;
     }());
-    PATTERN.SweetPrecure = SweetPrecure;
+    mod.SweetPrecure = SweetPrecure;
     var SmilePrecure = (function () {
         function SmilePrecure() {
         }
@@ -17,20 +21,22 @@ var PATTERN;
         };
         return SmilePrecure;
     }());
-    PATTERN.SmilePrecure = SmilePrecure;
+    mod.SmilePrecure = SmilePrecure;
     var MovieDecorator = (function () {
         function MovieDecorator(precure) {
-            this.precure = precure;
             this.subTitle = 'title3';
+            this.precure = precure;
         }
         MovieDecorator.prototype.getTitle = function () {
             return this.subTitle + this.precure.getTitle();
         };
+        MovieDecorator.prototype.getValue = function () {
+            return this.precure.getValue();
+        };
         return MovieDecorator;
     }());
-    PATTERN.MovieDecorator = MovieDecorator;
-    var sweetPrecureMovie = new MovieDecorator(new SweetPrecure());
-    var smilePrecureMovie = new MovieDecorator(new SmilePrecure());
-    console.log(sweetPrecureMovie, smilePrecureMovie);
-})(PATTERN || (PATTERN = {}));
+    mod.MovieDecorator = MovieDecorator;
+})(mod || (mod = {}));
+var sweet = new mod.MovieDecorator(new mod.SweetPrecure());
+console.log(sweet.getValue());
 //# sourceMappingURL=decorator2.js.map

@@ -1,10 +1,14 @@
-module pattern {
+module mod {
 
-  export interface Precure {
+  interface Precure {
     getTitle(): string;
   }
 
   export class SweetPrecure implements Precure {
+    abc = 123;
+    getValue():number{
+      return this.abc;
+    }
     getTitle(): string {
       return 'title1';
     }
@@ -26,7 +30,9 @@ module pattern {
     }
   }
   
-  var sweetPrecureMovie = new MovieDecorator(new SweetPrecure());
-  var smilePrecureMovie = new MovieDecorator(new SmilePrecure());
-  console.log(sweetPrecureMovie,smilePrecureMovie);
+  // var sweetPrecureMovie = new MovieDecorator(new SweetPrecure());
+  // var smilePrecureMovie = new MovieDecorator(new SmilePrecure());
+  // console.log(sweetPrecureMovie.getTitle(),smilePrecureMovie.getTitle());
 }
+
+var sweet = new mod.MovieDecorator(new mod.SweetPrecure());
