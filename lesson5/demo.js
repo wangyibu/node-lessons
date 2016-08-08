@@ -1,4 +1,3 @@
-"use strict";
 var async = require("async");
 var concurrencyCount = 0;
 var fetchUrl = function (url, callback) {

@@ -18,7 +18,7 @@ var test;
             configurable: true
         });
         return Product;
-    }());
+    })();
     var newLine = "<br />";
     var obj = {};
     Object.defineProperties(obj, {

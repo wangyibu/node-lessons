@@ -1,43 +1,60 @@
 /// <referrence path="../typings/tsd.d.ts" />
-var width = 600, height = 600;
+var width = 600,
+    height = 600;
+
 var tree = d3.layout.tree()
     .size([height, width - 160]);
+
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
-    return [d.y, d.x];
-});
+        return [d.y, d.x];
+    });
+
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(40,0)");
-d3.json('demo.json', function (err, data) {
-    var root = data;
-    var nodes = tree.nodes(root);
-    var links = tree.links(nodes);
-    var link = svg.selectAll(".link")
-        .data(links)
-        .enter()
-        .append("path")
-        .attr("class", function (d) { return (d.source != root) ? "link_dashed" : "link_continuous"; })
-        .attr("d", diagonal);
+
+
+d3.json('demo.json',(err: any, data: any)=>{
+   var root = data;
+   var nodes = tree.nodes(root);
+   var links = tree.links(nodes);
+   var link = svg.selectAll(".link")
+    .data(links)
+    .enter()
+    .append("path")
+    .attr("class", function (d) { return (d.source != root) ? "link_dashed" : "link_continuous"; })
+    .attr("d", diagonal);
+
     var node = svg.selectAll(".node")
         .data(nodes)
         .enter()
         .append("g")
         .attr("class", "node")
         .attr("transform", function (d) {
-        return "translate(" + d.y + "," + d.x + ")";
-    });
+            return "translate(" + d.y + "," + d.x + ")";
+        })
+
     node.append("circle")
         .attr("r", 4.5);
+
     node.append("text")
         .attr("dx", function (d) { return d.children ? -8 : 8; })
         .attr("dy", 3)
         .style("text-anchor", function (d) { return d.children ? "end" : "start"; })
-        .text(function (d) { return d.name; });
+        .text(function (d:any) { return d.name; });
+
     d3.select(self.frameElement).style("height", height + "px");
 });
+
+
+
+
+
+
+
 // function getDatas() {
 //     return {
 //         "name": "flare",
@@ -186,5 +203,4 @@ d3.json('demo.json', function (err, data) {
 //                     }]
 //             }, { "name": "ZZ", "children": [] }]
 //     };
-// } 
-//# sourceMappingURL=demo.js.map
+// }
