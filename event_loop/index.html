@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    #foo{
+      width:200px;
+      height: 200px;
+      background:gray;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="foo">
+    abc
+  </div>
+  <script>
+
+    function init() {
+  var link = document.getElementById("foo");
+
+  link.addEventListener("click", function changeColor() {
+    this.style.color = "burlywood";
+  });
+}
+
+init();
+  </script>
+</body>
+
+</html>

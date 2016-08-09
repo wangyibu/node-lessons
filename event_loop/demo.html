@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* Within main.js */
+
+var firstFunction = function () {
+  console.log("I'm first!");
+};
+
+var secondFunction = function () {
+  firstFunction();
+  console.log("I'm second!");
+};
+
+// secondFunction();
+
+/* Results:
+ * => I'm first!
+ * => I'm second!
+ */
+  var foo = function(){
+    return foo();
+
+  }
+  foo();
+  </script>
+</body>
+
+</html>
