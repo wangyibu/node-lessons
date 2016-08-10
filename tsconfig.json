@@ -13,6 +13,6 @@
         "**/*.ts",
         "**/*.tsx",
         "!node_modules/**",
-        "!typings/"
+        "!typings/**"
     ]
 }
