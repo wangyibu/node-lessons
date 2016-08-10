@@ -95,7 +95,21 @@
                       "name": "Kartograph",
                       "description": "Lovely vector based mapping library with good browser support",
                       "url": "http://kartograph.org/",
-                      "free": true
+                      "free": true,
+                      "children": [
+                        {
+                          "name": "Kartograph",
+                          "description": "Lovely vector based mapping library with good browser support",
+                          "url": "http://kartograph.org/",
+                          "free": true
+                        },
+                        {
+                          "name": "Leaflet",
+                          "description": "Tile-based mapping library",
+                          "url": "http://leafletjs.com/",
+                          "free": true
+                        }
+                      ]
                     },
                     {
                       "name": "Leaflet",
