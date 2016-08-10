@@ -1,4 +1,3 @@
-"use strict";
 var async = require("async");
 var concurrencyCount = 0;
 var fetchUrl = function (url, callback) {
@@ -20,4 +19,3 @@ async.mapLimit(urls, 5, function (url, callback) {
     console.log('final:');
     console.log(result);
 });
-//# sourceMappingURL=demo.js.map

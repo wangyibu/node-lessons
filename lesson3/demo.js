@@ -1,4 +1,3 @@
-"use strict";
 var express = require("express");
 var cheerio = require("cheerio");
 var superagent = require("superagent");
@@ -30,4 +29,3 @@ app.get('/', function (req, res, next) {
 app.listen(3000, function () {
     console.log('website open');
 });
-//# sourceMappingURL=demo.js.map

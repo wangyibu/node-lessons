@@ -18,7 +18,7 @@ var test;
             configurable: true
         });
         return Product;
-    }());
+    })();
     var newLine = "<br />";
     var obj = {};
     Object.defineProperties(obj, {
@@ -45,4 +45,3 @@ var test;
     obj.newAccessorProperty = 10;
     document.write("newAccessorProperty value: " + obj.newAccessorProperty + newLine);
 })(test || (test = {}));
-//# sourceMappingURL=objectdefine.js.map

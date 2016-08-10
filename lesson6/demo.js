@@ -15,4 +15,3 @@ var main;
     }
     exports.fibonacci = fibonacci;
 })(main || (main = {}));
-//# sourceMappingURL=demo.js.map

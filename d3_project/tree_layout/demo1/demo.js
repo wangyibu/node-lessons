@@ -187,4 +187,3 @@ d3.json('demo.json', function (err, data) {
 //             }, { "name": "ZZ", "children": [] }]
 //     };
 // } 
-//# sourceMappingURL=demo.js.map

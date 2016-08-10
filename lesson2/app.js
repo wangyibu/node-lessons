@@ -1,4 +1,3 @@
-"use strict";
 /// <reference path="./../typings/tsd.d.ts" />
 var express = require("express");
 var utility = require("utility");
@@ -15,4 +14,3 @@ app.listen(3000, function (req, res) {
     console.log('app is running at port 3000');
 });
 //  访问 http://localhost:3000/?q=arkia123 
-//# sourceMappingURL=app.js.map

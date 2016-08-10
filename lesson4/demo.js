@@ -1,4 +1,3 @@
-"use strict";
 var superagent = require("superagent");
 var cheerio = require("cheerio");
 var eventproxy = require('eventproxy');
@@ -43,4 +42,3 @@ superagent.get(cnodeUrl).end(function (err, res) {
         });
     });
 });
-//# sourceMappingURL=demo.js.map

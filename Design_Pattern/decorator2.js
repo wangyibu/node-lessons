@@ -11,7 +11,7 @@ var mod;
             return 'title1';
         };
         return SweetPrecure;
-    }());
+    })();
     mod.SweetPrecure = SweetPrecure;
     var SmilePrecure = (function () {
         function SmilePrecure() {
@@ -20,23 +20,18 @@ var mod;
             return 'title2';
         };
         return SmilePrecure;
-    }());
+    })();
     mod.SmilePrecure = SmilePrecure;
     var MovieDecorator = (function () {
         function MovieDecorator(precure) {
-            this.subTitle = 'title3';
             this.precure = precure;
+            this.subTitle = 'title3';
         }
         MovieDecorator.prototype.getTitle = function () {
             return this.subTitle + this.precure.getTitle();
         };
-        MovieDecorator.prototype.getValue = function () {
-            return this.precure.getValue();
-        };
         return MovieDecorator;
-    }());
+    })();
     mod.MovieDecorator = MovieDecorator;
 })(mod || (mod = {}));
 var sweet = new mod.MovieDecorator(new mod.SweetPrecure());
-console.log(sweet.getValue());
-//# sourceMappingURL=decorator2.js.map
