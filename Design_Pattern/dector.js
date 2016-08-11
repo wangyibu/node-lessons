@@ -5,7 +5,7 @@ var OldStuff = (function () {
         console.log("Some old stuff wrapped by new stuff");
     };
     return OldStuff;
-})();
+}());
 var NewStuff = (function () {
     function NewStuff() {
     }
@@ -14,7 +14,7 @@ var NewStuff = (function () {
         adaptee.display();
     };
     return NewStuff;
-})();
+}());
 (function main() {
     var adapter = new NewStuff();
     adapter.call();

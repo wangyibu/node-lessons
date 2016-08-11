@@ -22,7 +22,7 @@ module test {
 
 
 
-  var obj = {};
+  var obj:any = {};
   Object.defineProperties(obj, {
     newDataProperty: {
       value: 101,

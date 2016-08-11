@@ -11,7 +11,7 @@ var ConcreteComponent = (function () {
         console.log("`operation` of ConcreteComponent", this.s, " is being called!");
     };
     return ConcreteComponent;
-})();
+}());
 var Decorator = (function () {
     function Decorator(id, component) {
         this.id = id;
@@ -29,7 +29,7 @@ var Decorator = (function () {
         this.component.operation();
     };
     return Decorator;
-})();
+}());
 var ConcreteDecorator = (function (_super) {
     __extends(ConcreteDecorator, _super);
     function ConcreteDecorator(id, component) {
@@ -40,7 +40,7 @@ var ConcreteDecorator = (function (_super) {
         console.log("`operation` of ConcreteDecorator", this.Id, " is being called!");
     };
     return ConcreteDecorator;
-})(Decorator);
+}(Decorator));
 (function main() {
     var decorator1 = new ConcreteDecorator(1, new ConcreteComponent("Comp1"));
     decorator1.operation();

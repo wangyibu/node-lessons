@@ -5,9 +5,9 @@
         "noImplicitAny": false,
         "sourceMap": false
     },
-    "exclude": [
+     "exclude": [
         "node_modules",
-        "typings"
+        "wwwroot"
     ],
     "filesGlob": [
         "**/*.ts",
@@ -16,3 +16,6 @@
         "!typings/**"
     ]
 }
+
+ 
+  

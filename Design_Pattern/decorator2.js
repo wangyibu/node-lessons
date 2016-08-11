@@ -11,7 +11,7 @@ var mod;
             return 'title1';
         };
         return SweetPrecure;
-    })();
+    }());
     mod.SweetPrecure = SweetPrecure;
     var SmilePrecure = (function () {
         function SmilePrecure() {
@@ -20,7 +20,7 @@ var mod;
             return 'title2';
         };
         return SmilePrecure;
-    })();
+    }());
     mod.SmilePrecure = SmilePrecure;
     var MovieDecorator = (function () {
         function MovieDecorator(precure) {
@@ -31,7 +31,7 @@ var mod;
             return this.subTitle + this.precure.getTitle();
         };
         return MovieDecorator;
-    })();
+    }());
     mod.MovieDecorator = MovieDecorator;
 })(mod || (mod = {}));
 var sweet = new mod.MovieDecorator(new mod.SweetPrecure());
