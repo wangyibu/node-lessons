@@ -70,7 +70,7 @@ interface AsyncCargo {
     kill(): void;
 }
 
-interface Async {
+interface Async{
 
     // Collections
     each<T>(arr: T[], iterator: AsyncIterator<T>, callback?: ErrorCallback): void;

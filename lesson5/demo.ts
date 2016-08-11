@@ -18,10 +18,12 @@ for (var i = 0; i < 30; i++) {
     urls.push('http://datasource_' + i);
 }
 
+
 async.mapLimit(urls,5,(url,callback)=>{
     fetchUrl(url,callback);
 },(err,result)=>{
     console.log('final:');
     console.log(result);
 })
+
 

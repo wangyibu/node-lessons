@@ -77,7 +77,8 @@ var update = (source) => {
             return d.id || (d.id = ++i);
         });
 
-    // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置
+    console.log('123');
+    // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
     var nodeEnter = node.enter().append("g")
         .attr("class", "node")
         .attr("transform", (d) => {
@@ -85,12 +86,14 @@ var update = (source) => {
         })
         .on("click", click);
 
+    //添加节点 如果有字节点颜色加深
     nodeEnter.append("circle")
         .attr("r", 1e-6)
         .style("fill", (d) => {
             return d._children ? "lightsteelblue" : "#fff";
         });
 
+    // 增加文本   节点文字显示左侧还是右侧
     nodeEnter.append("text")
         .attr("x", (d) => {
             return d.children || d._children ? -10 : 10;
@@ -104,7 +107,7 @@ var update = (source) => {
         })
         .style("fill-opacity", 1e-6);
 
-    // Transition nodes to their new position.
+    // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
         .duration(duration)
         .attr("transform", (d) => {
