@@ -2,13 +2,13 @@
 var margin = { top: 20, right: 120, bottom: 20, left: 120 }, width = 1400, height = 800;
 var i = 0, duration = 750, root;
 var zm;
-zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraw);
 //Redraw for zoom
-var redraw = function () {
+var redraws = function () {
     //console.log("here", d3.event.translate, d3.event.scale);
     svg.attr("transform", "translate(" + d3.event.translate + ")"
         + " scale(" + d3.event.scale + ")");
 };
+zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraws);
 // var tree = d3.layout.tree().size([height, width]);
 var tree = d3.layout.tree().nodeSize([70, 30]);
 var diagonal = d3.svg.diagonal()
@@ -82,7 +82,6 @@ var update = function (source) {
         .style("fill-opacity", 1e-6);
     // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
-        .duration(duration)
         .attr("transform", function (d) {
         return "translate(" + d.y + "," + d.x + ")";
     });

@@ -25,14 +25,14 @@ var i = 0,
 var zm;
 
 //Redraw for zoom
-var redraw = () => {
+var redraws = () => {
     //console.log("here", d3.event.translate, d3.event.scale);
     svg.attr("transform",
         "translate(" + (<d3.ZoomEvent>d3.event).translate + ")"
         + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
 }
 
-zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraw);
+zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraws);
 
 
 // var tree = d3.layout.tree().size([height, width]);

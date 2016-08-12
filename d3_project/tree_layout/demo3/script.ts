@@ -1,16 +1,4 @@
-updateinfo();
 
-var updateinfo = () => {
-    var json = { "r": { "name": "flare", "children": [{ "name": "animate", "children": [{ "name": "Easing" }, { "name": "FunctionSequence" }, { "name": "ISchedulable" }, { "name": "Parallel" }, { "name": "Parallel2" }, { "name": "Parallel4" }, { "name": "Parallel6" }, { "name": "Pause" }] }] }, "l": { "name": "flare", "children": [{ "name": "query", "children": [{ "name": "AggregateExpression", "pos": "l" }, { "name": "And", "pos": "l" }, { "name": "Arithmetic", "pos": "l" }, { "name": "fasdfasdf", "pos": "l" }, { "name": "Arithmasdfasetic", "pos": "l" }, { "name": "dfasdfa", "pos": "l" }], "pos": "l" }] } };
-    var d3js = (json) => {
-        var objRight = json['r'] ? json['r'] : {};
-        var objLeft = json['l'] ? json['l'] : {};
-        d3jsTree('#body', objRight, objLeft);
-    }
-    d3js(json);
-}
-
-// d3js tree
 var d3jsTree = (aim, objRight, objLeft) => {
     // $(aim+' svg').remove();
     var m = [20, 120, 20, 120],
@@ -28,7 +16,7 @@ var d3jsTree = (aim, objRight, objLeft) => {
         .append("svg:g")
         .attr("transform", "translate(" + h + "," + m[0] + ")"); // translate(靠左，靠上)
 
-    update(objRight, objLeft);
+    
     var init_nodes = (left) => {
         left.x0 = h / 2;
         left.y0 = 0;
@@ -142,7 +130,7 @@ var d3jsTree = (aim, objRight, objLeft) => {
             d.y0 = d.y;
         });
     }
-
+    update(objRight, objLeft);
     // Toggle children.
     var toggle = (d) => {
         if (d.children) {
@@ -154,3 +142,14 @@ var d3jsTree = (aim, objRight, objLeft) => {
         }
     }
 }
+var updateinfo = () => {
+    var json = { "r": { "name": "flare", "children": [{ "name": "animate", "children": [{ "name": "Easing" }, { "name": "FunctionSequence" }, { "name": "ISchedulable" }, { "name": "Parallel" }, { "name": "Parallel2" }, { "name": "Parallel4" }, { "name": "Parallel6" }, { "name": "Pause" }] }] }, "l": { "name": "flare", "children": [{ "name": "query", "children": [{ "name": "AggregateExpression", "pos": "l" }, { "name": "And", "pos": "l" }, { "name": "Arithmetic", "pos": "l" }, { "name": "fasdfasdf", "pos": "l" }, { "name": "Arithmasdfasetic", "pos": "l" }, { "name": "dfasdfa", "pos": "l" }], "pos": "l" }] } };
+    var d3js = (json) => {
+        var objRight = json['r'] ? json['r'] : {};
+        var objLeft = json['l'] ? json['l'] : {};
+        d3jsTree('#body', objRight, objLeft);
+    }
+    d3js(json);
+}
+updateinfo();
+// d3js tree

@@ -87,11 +87,11 @@ function collapse(d) {
 }
 
 root.children.forEach(collapse);
-update(root);
+updates(root);
 
 // d3.select("#body").style("height", "800px");
 
-function update(source) {
+function updates(source) {
 
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
@@ -114,7 +114,7 @@ function update(source) {
         .attr("transform", function (d) {
             return "translate(" + source.x0 + "," + source.y0 + ")";
         })
-        .on("click", click);
+        .on("click", clicks);
 
     nodeEnter.append("rect")
         .attr("width", rectW)
@@ -221,7 +221,7 @@ function update(source) {
 }
 
 // Toggle children on click.
-function click(d:any) {
+function clicks(d:any) {
     if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -229,7 +229,7 @@ function click(d:any) {
         d.children = d._children;
         d._children = null;
     }
-    update(d);
+    updates(d);
 }
 
 //Redraw for zoom
