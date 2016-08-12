@@ -23,8 +23,8 @@ var i = 0,
     duration = 750,
     root;
 
-var tree = d3.layout.tree()
-    .size([height, width]);
+// var tree = d3.layout.tree().size([height, width]);
+var tree = d3.layout.tree().nodeSize([70, 40]);
 
 var diagonal = d3.svg.diagonal()
     .projection((d) => {

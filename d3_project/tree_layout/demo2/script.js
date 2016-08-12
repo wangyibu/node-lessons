@@ -1,8 +1,8 @@
 /// <reference path="../../typings/tsd.d.ts" />
 var margin = { top: 20, right: 120, bottom: 20, left: 120 }, width = 1400, height = 800;
 var i = 0, duration = 750, root;
-var tree = d3.layout.tree()
-    .size([height, width]);
+// var tree = d3.layout.tree().size([height, width]);
+var tree = d3.layout.tree().nodeSize([70, 40]);
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
     return [d.y, d.x];
