@@ -60,7 +60,7 @@ d3.json("tree.json", function (error, data) {
         .attr("text-anchor", function (d) { return d.x < 180 ? "start" : "end"; })
         .attr("transform", function (d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; });
     //点击的话，隐藏或者显示子节点
-    function nodeClick(d) {
+    var nodeClick = function (d) {
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -70,9 +70,9 @@ d3.json("tree.json", function (error, data) {
             d._children = null;
         }
         update(d);
-    }
+    };
     //更新显示
-    function update(source) {
+    var update = function (source) {
         //取得现有的节点数据,因为设置了Children属性，没有Children的节点将被删除
         var nodes = tree.nodes(root).reverse();
         var links = tree.links(nodes);
@@ -132,5 +132,5 @@ d3.json("tree.json", function (error, data) {
             d.x0 = d.x;
             d.y0 = d.y;
         });
-    }
+    };
 });

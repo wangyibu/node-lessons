@@ -949,7 +949,7 @@ declare namespace d3 {
     /**
      * The current event's value. Use this variable in a handler registered with `selection.on`.
      */
-    export var event: Event | BaseEvent;
+    export var event: Event | BaseEvent | ZoomEvent;
 
     /**
      * Returns the x and y coordinates of the mouse relative to the provided container element, using d3.event for the mouse's position on the page.

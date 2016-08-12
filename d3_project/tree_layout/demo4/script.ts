@@ -31,13 +31,11 @@ var svg = d3.select("body").append("svg")
 d3.json("tree.json", function (error, data) {
 
     var root = data;
-
     //根据数据生成nodes集合
     var nodes = tree.nodes(data);
 
-
     //记录现在的位置
-    nodes.forEach(function (d:any) {
+    nodes.forEach(function (d: any) {
         d.x0 = d.x;
         d.y0 = d.y;
     });
@@ -47,11 +45,11 @@ d3.json("tree.json", function (error, data) {
 
     //根据node集合生成节点,添加id是为了区分是否冗余的节点
     var node = svg.selectAll(".node")
-        .data(nodes, function (d:any) { return d.id || (d.id = ++index); });
+        .data(nodes, function (d: any) { return d.id || (d.id = ++index); });
 
     //为关系集合设置贝塞尔曲线连接
     var link = svg.selectAll(".link")
-        .data(links, function (d:any) { return d.target.id; })
+        .data(links, function (d: any) { return d.target.id; })
         .enter()
         .append("path")
         .attr("class", "link")
@@ -76,7 +74,7 @@ d3.json("tree.json", function (error, data) {
         .attr("transform", function (d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; });
 
     //点击的话，隐藏或者显示子节点
-    function nodeClick(d) {
+    var nodeClick = (d: any) => {
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -89,17 +87,17 @@ d3.json("tree.json", function (error, data) {
     }
 
     //更新显示
-    function update(source) {
+    var update = (source) => {
         //取得现有的节点数据,因为设置了Children属性，没有Children的节点将被删除
         var nodes = tree.nodes(root).reverse();
         var links = tree.links(nodes);
 
         //为节点更新数据
         var node = svg.selectAll("g.node")
-            .data(nodes, function (d:any) { return d.id || (d.id = ++index); });
+            .data(nodes, function (d: any) { return d.id || (d.id = ++index); });
 
         //为链接更新数据
-        var link = svg.selectAll("path.link").data<any>(links,  (d)=> { return d.target.id; });
+        var link = svg.selectAll("path.link").data<any>(links, (d) => { return d.target.id; });
 
         //更新链接
         link.enter()
@@ -156,7 +154,7 @@ d3.json("tree.json", function (error, data) {
             .remove();
 
         //记录下当前位置,为下次动画记录初始值
-        nodes.forEach(function (d:any) {
+        nodes.forEach(function (d: any) {
             d.x0 = d.x;
             d.y0 = d.y;
         });

@@ -1,17 +1,26 @@
 /// <reference path="../../typings/tsd.d.ts" />
 var margin = { top: 20, right: 120, bottom: 20, left: 120 }, width = 1400, height = 800;
 var i = 0, duration = 750, root;
+var zm;
+zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraw);
+//Redraw for zoom
+var redraw = function () {
+    //console.log("here", d3.event.translate, d3.event.scale);
+    svg.attr("transform", "translate(" + d3.event.translate + ")"
+        + " scale(" + d3.event.scale + ")");
+};
 // var tree = d3.layout.tree().size([height, width]);
-var tree = d3.layout.tree().nodeSize([70, 40]);
+var tree = d3.layout.tree().nodeSize([70, 30]);
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
     return [d.y, d.x];
 });
 var svg = d3.select("body").append("svg")
-    .attr("width", 2000)
-    .attr("height", 800)
+    .attr("width", width)
+    .attr("height", height)
+    .call(zm)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 d3.json("doc.json", function (error, data) {
     if (error)
         throw error;

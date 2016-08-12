@@ -22,9 +22,21 @@ var margin = { top: 20, right: 120, bottom: 20, left: 120 },
 var i = 0,
     duration = 750,
     root;
+var zm;
+
+//Redraw for zoom
+var redraw = () => {
+    //console.log("here", d3.event.translate, d3.event.scale);
+    svg.attr("transform",
+        "translate(" + (<d3.ZoomEvent>d3.event).translate + ")"
+        + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
+}
+
+zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraw);
+
 
 // var tree = d3.layout.tree().size([height, width]);
-var tree = d3.layout.tree().nodeSize([70, 40]);
+var tree = d3.layout.tree().nodeSize([70, 30]);
 
 var diagonal = d3.svg.diagonal()
     .projection((d) => {
@@ -32,10 +44,12 @@ var diagonal = d3.svg.diagonal()
     });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", 2000)
-    .attr("height", 800)
+    .attr("width", width)
+    .attr("height", height)
+    .call(zm)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
+
 
 d3.json("doc.json", (error, data: point) => {
     if (error) throw error;
@@ -109,7 +123,7 @@ var update = (source) => {
 
     // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
-        .duration(duration)
+        // .duration(duration)
         .attr("transform", (d) => {
             return "translate(" + d.y + "," + d.x + ")";
         });

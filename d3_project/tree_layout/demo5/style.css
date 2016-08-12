@@ -1,0 +1,42 @@
+.node {
+    cursor: pointer;
+}
+
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font: 10px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    margin-left: 200px;
+}
+
+.svg-container {
+    display: inline-block;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    line-height: 0;
+    bottom: 0;
+    box-sizing: border-box;
+}
+
+.svg-main {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
