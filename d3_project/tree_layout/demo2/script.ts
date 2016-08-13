@@ -16,8 +16,8 @@ interface point {
 }
 
 var margin = { top: 20, right: 120, bottom: 20, left: 120 },
-    width = 1400,
-    height = 800;
+    width = 700,
+    height = 700;
 
 var i = 0,
     duration = 750,
@@ -32,10 +32,10 @@ var redraws = () => {
         + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
 }
 
-zm = d3.behavior.zoom().scaleExtent([1, 3]).on("zoom", redraws);
+zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
+zm.translate([width/2, height/2]);
 
-
-// var tree = d3.layout.tree().size([height, width]);
+// var tree = d3.layout.tree().size([height/2, width/2]);
 var tree = d3.layout.tree().nodeSize([70, 30]);
 
 var diagonal = d3.svg.diagonal()
@@ -53,7 +53,6 @@ var svg = d3.select("body").append("svg")
 
 d3.json("doc.json", (error, data: point) => {
     if (error) throw error;
-    console.log(data);
     root = data;
     root.x0 = 0;   // 最开始的起点展开前x0坐标
     root.y0 = 0;   // 最开始的起点展开前y0坐标
@@ -70,7 +69,6 @@ d3.json("doc.json", (error, data: point) => {
 
     data.children.forEach(collapse);
     update(root);
-    console.log(data);
 });
 
 var update = (source) => {
@@ -91,7 +89,6 @@ var update = (source) => {
             return d.id || (d.id = ++i);
         });
 
-    console.log('123');
     // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
     var nodeEnter = node.enter().append("g")
         .attr("class", "node")
@@ -123,7 +120,7 @@ var update = (source) => {
 
     // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
-        // .duration(duration)
+        .duration(duration)
         .attr("transform", (d) => {
             return "translate(" + d.y + "," + d.x + ")";
         });
