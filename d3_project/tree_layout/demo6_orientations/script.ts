@@ -27,17 +27,23 @@ module test.orientation {
   };
 
   var svg = d3.select("body").selectAll("svg")
-    .data(d3.entries(orientations))
+    .data(d3.entries(orientations)) // 转化数组 【 key ： left-to-right   value ：{size:[heigh,width],x:func,y:func}
     .enter().append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  svg.append("rect")
+  svg.append('a')
+    .attr("xlink:href","http://www.baidu.com")
+    .append("rect")
     .attr("width", width)
     .attr("height", height)
-    .attr("class", "border");
+    .attr("class", "border")
+    .on('click',function(datum, index: number, outerIndex: number){
+        console.log(datum,index,outerIndex);
+    });
+  
 
   svg.append("text")
     .attr("x", 6)
