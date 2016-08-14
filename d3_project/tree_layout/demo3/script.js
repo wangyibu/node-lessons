@@ -1,9 +1,21 @@
+d3.json('doc.json', function (err, data) {
+    var objRight = data['r'] ? data['r'] : {};
+    var objLeft = data['l'] ? data['l'] : {};
+    d3jsTree('#body', objRight, objLeft);
+});
 var d3jsTree = function (aim, objRight, objLeft) {
     // $(aim+' svg').remove();
     var m = [20, 120, 20, 120], w = 1280 - m[1] - m[3], h = 600 - m[0] - m[2], //靠左
     i = 0;
     var tree = d3.layout.cluster().size([h, w]);
-    var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
+    var diagonal = d3.svg.diagonal()
+        .source(function (d) {
+        return { "x": d.source.x, "y": d.source.y };
+    })
+        .target(function (d) {
+        return { "x": d.target.x, "y": d.target.y };
+    });
+    // .projection((d) => { return [d.y, d.x]; });
     var vis = d3.select(aim).append("svg:svg")
         .attr("width", 1200)
         .attr("class", "svg-content")
@@ -18,6 +30,7 @@ var d3jsTree = function (aim, objRight, objLeft) {
         return left_nodes;
     };
     var j = 0;
+    // source : right  l : left
     var update = function (source, l) {
         var duration = d3.event && d3.event.altKey ? 5000 : 500;
         // Compute the new tree layout.
@@ -120,19 +133,3 @@ var d3jsTree = function (aim, objRight, objLeft) {
         }
     };
 };
-d3.json('doc.json', function (err, data) {
-    var objRight = data['r'] ? data['r'] : {};
-    var objLeft = data['l'] ? data['l'] : {};
-    d3jsTree('#body', objRight, objLeft);
-});
-// var updateinfo = () => {
-//     var json = { "r": { "name": "flare", "children": [{ "name": "animate", "children": [{ "name": "Easing" }, { "name": "FunctionSequence" }, { "name": "ISchedulable" }, { "name": "Parallel" }, { "name": "Parallel2" }, { "name": "Parallel4" }, { "name": "Parallel6" }, { "name": "Pause" }] }] }, "l": { "name": "flare", "children": [{ "name": "query", "children": [{ "name": "AggregateExpression", "pos": "l" }, { "name": "And", "pos": "l" }, { "name": "Arithmetic", "pos": "l" }, { "name": "fasdfasdf", "pos": "l" }, { "name": "Arithmasdfasetic", "pos": "l" }, { "name": "dfasdfa", "pos": "l" }], "pos": "l" }] } };
-//     var d3js = (json) => {
-//         var objRight = json['r'] ? json['r'] : {};
-//         var objLeft = json['l'] ? json['l'] : {};
-//         d3jsTree('#body', objRight, objLeft);
-//     }
-//     d3js(json);
-// }
-// updateinfo();
-// d3js tree
