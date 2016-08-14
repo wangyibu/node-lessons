@@ -6,6 +6,7 @@ var d3jsTree = function (aim, objRight, objLeft) {
     var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
     var vis = d3.select(aim).append("svg:svg")
         .attr("width", 1200)
+        .attr("class", "svg-content")
         .attr("height", h + m[0] + m[2])
         .append("svg:g")
         .attr("transform", "translate(" + h + "," + m[0] + ")"); // translate(靠左，靠上)
@@ -119,14 +120,19 @@ var d3jsTree = function (aim, objRight, objLeft) {
         }
     };
 };
-var updateinfo = function () {
-    var json = { "r": { "name": "flare", "children": [{ "name": "animate", "children": [{ "name": "Easing" }, { "name": "FunctionSequence" }, { "name": "ISchedulable" }, { "name": "Parallel" }, { "name": "Parallel2" }, { "name": "Parallel4" }, { "name": "Parallel6" }, { "name": "Pause" }] }] }, "l": { "name": "flare", "children": [{ "name": "query", "children": [{ "name": "AggregateExpression", "pos": "l" }, { "name": "And", "pos": "l" }, { "name": "Arithmetic", "pos": "l" }, { "name": "fasdfasdf", "pos": "l" }, { "name": "Arithmasdfasetic", "pos": "l" }, { "name": "dfasdfa", "pos": "l" }], "pos": "l" }] } };
-    var d3js = function (json) {
-        var objRight = json['r'] ? json['r'] : {};
-        var objLeft = json['l'] ? json['l'] : {};
-        d3jsTree('#body', objRight, objLeft);
-    };
-    d3js(json);
-};
-updateinfo();
+d3.json('doc.json', function (err, data) {
+    var objRight = data['r'] ? data['r'] : {};
+    var objLeft = data['l'] ? data['l'] : {};
+    d3jsTree('#body', objRight, objLeft);
+});
+// var updateinfo = () => {
+//     var json = { "r": { "name": "flare", "children": [{ "name": "animate", "children": [{ "name": "Easing" }, { "name": "FunctionSequence" }, { "name": "ISchedulable" }, { "name": "Parallel" }, { "name": "Parallel2" }, { "name": "Parallel4" }, { "name": "Parallel6" }, { "name": "Pause" }] }] }, "l": { "name": "flare", "children": [{ "name": "query", "children": [{ "name": "AggregateExpression", "pos": "l" }, { "name": "And", "pos": "l" }, { "name": "Arithmetic", "pos": "l" }, { "name": "fasdfasdf", "pos": "l" }, { "name": "Arithmasdfasetic", "pos": "l" }, { "name": "dfasdfa", "pos": "l" }], "pos": "l" }] } };
+//     var d3js = (json) => {
+//         var objRight = json['r'] ? json['r'] : {};
+//         var objLeft = json['l'] ? json['l'] : {};
+//         d3jsTree('#body', objRight, objLeft);
+//     }
+//     d3js(json);
+// }
+// updateinfo();
 // d3js tree

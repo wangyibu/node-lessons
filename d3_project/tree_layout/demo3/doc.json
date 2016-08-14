@@ -10,24 +10,6 @@
                     },
                     {
                         "name": "FunctionSequence"
-                    },
-                    {
-                        "name": "ISchedulable"
-                    },
-                    {
-                        "name": "Parallel"
-                    },
-                    {
-                        "name": "Parallel2"
-                    },
-                    {
-                        "name": "Parallel4"
-                    },
-                    {
-                        "name": "Parallel6"
-                    },
-                    {
-                        "name": "Pause"
                     }
                 ]
             }
@@ -45,22 +27,6 @@
                     },
                     {
                         "name": "And",
-                        "pos": "l"
-                    },
-                    {
-                        "name": "Arithmetic",
-                        "pos": "l"
-                    },
-                    {
-                        "name": "fasdfasdf",
-                        "pos": "l"
-                    },
-                    {
-                        "name": "Arithmasdfasetic",
-                        "pos": "l"
-                    },
-                    {
-                        "name": "dfasdfa",
                         "pos": "l"
                     }
                 ],

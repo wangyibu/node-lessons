@@ -22,3 +22,6 @@ path.link {
     stroke: #ccc;
     stroke-width: 1.5px;
 }
+.svg-content{
+    border:1px solid red;
+}
