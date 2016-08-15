@@ -129,20 +129,36 @@ var update = (source) => {
     nodeEnter.append('rect')
         .attr("width", rectW)
         .attr("height", rectH)
-        .attr("stroke", "black")
+        .attr("stroke", "#2ab3ed")
         .attr("stroke-width", 1)
-        .style("fill","#fff");
+        .style("fill","#e8eef7");
     
     nodeEnter.append('rect')
-        .attr("width",rectW)
+        .attr("width",rectW-1)
         .attr("height",20)
-        .attr("stroke","blue")
-        .attr("stroke-width", 1)
         .attr("y",(d)=>{
-            return 40;
+            return 39.5;
         })
-        .style("fill","#fff");
-        
+        .attr("x",(d)=>{
+            return 0.5;
+        })
+        .style("fill","#c8dbf7");
+    
+    nodeEnter.append("text")
+        .attr("x", (d) => {
+            return 10;
+        })
+        .attr("y", (d) => {
+            return rectH - 5;
+        })
+        .attr("text-anchor", (d) => {
+            // return d.children || d._children ? "end" : "start";
+            return "start";
+        })
+        .text((d) => {
+            return "页面访问量:34333112";
+        })
+        .style("fill-opacity", 1e-6);
 
     //添加节点 如果有字节点颜色加深
     nodeEnter.append("circle")
@@ -168,7 +184,7 @@ var update = (source) => {
             return 0;
         })
         .attr("y", (d) => {
-            return 8;
+            return 10;
         })
         .attr("dy", ".55em")
         .attr("text-anchor", (d) => {
@@ -178,7 +194,6 @@ var update = (source) => {
         .text((d) => {
             return d.name;
         })
-        .style("fill-opacity", 1e-6)
         .call(wrap,200);
 
     // Transition nodes to their new position.  // 增加动画延时
