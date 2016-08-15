@@ -50,7 +50,7 @@ var test;
             if (error)
                 throw error;
             svg.each(function (orientation) {
-                var svg = d3.select(this), o = orientation.value;
+                var svg = d3.select(this), o = orientation.value; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 // Compute the layout.
                 var tree = d3.layout.tree().size(o.size), nodes = tree.nodes(root), links = tree.links(nodes);
                 // Create the link lines.
@@ -58,7 +58,9 @@ var test;
                     .data(links)
                     .enter().append("path")
                     .attr("class", "link")
-                    .attr("d", d3.svg.diagonal().projection(function (d) { return [o.x(d), o.y(d)]; }));
+                    .attr("d", d3.svg.diagonal().projection(function (d) {
+                    return [o.x(d), o.y(d)];
+                }));
                 // Create the node circles.
                 svg.selectAll(".node")
                     .data(nodes)

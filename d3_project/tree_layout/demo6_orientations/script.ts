@@ -35,15 +35,15 @@ module test.orientation {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   svg.append('a')
-    .attr("xlink:href","http://www.baidu.com")
+    .attr("xlink:href", "http://www.baidu.com")
     .append("rect")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "border")
-    .on('click',function(datum, index: number, outerIndex: number){
-        console.log(datum,index,outerIndex);
+    .on('click', function (datum, index: number, outerIndex: number) {
+      console.log(datum, index, outerIndex);
     });
-  
+
 
   svg.append("text")
     .attr("x", 6)
@@ -54,9 +54,9 @@ module test.orientation {
   d3.json("doc.json", function (error, root) {
     if (error) throw error;
 
-    svg.each(function (orientation) {
+    svg.each(function (orientation) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>; 
       var svg = d3.select(this),
-        o = orientation.value;
+        o = orientation.value;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
 
       // Compute the layout.
       var tree = d3.layout.tree().size(o.size),
@@ -68,7 +68,11 @@ module test.orientation {
         .data(links)
         .enter().append("path")
         .attr("class", "link")
-        .attr("d", d3.svg.diagonal().projection(function (d) { return [o.x(d), o.y(d)]; }));
+        .attr("d", d3.svg.diagonal().projection(
+          function (d) {
+            return [o.x(d), o.y(d)];
+          })
+        );
 
       // Create the node circles.
       svg.selectAll(".node")
