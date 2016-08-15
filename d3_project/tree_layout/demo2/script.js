@@ -1,5 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
-var margin = { top: 20, right: 120, bottom: 20, left: 120 }, rectW = 100, rectH = 40, width = 1200, height = 700;
+var margin = { top: 20, right: 120, bottom: 20, left: 120 }, rectW = 200, rectH = 60, width = 1200, height = 700;
 var i = 0, duration = 750, root;
 var zm;
 //Redraw for zoom
@@ -11,10 +11,10 @@ var redraws = function () {
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
 zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
 // var tree = d3.layout.tree().size([height/2, width/2]);
-var tree = d3.layout.tree().nodeSize([70, 30]);
+var tree = d3.layout.tree().nodeSize([200, 60]);
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
-    return [d.y + rectW / 2, d.x + rectH / 2]; // 二次调整 参数
+    return [d.y + rectW, d.x + rectH / 2]; // 二次调整 参数
 });
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -41,13 +41,29 @@ d3.json("doc.json", function (error, data) {
     data.children.forEach(collapse);
     update(root);
 });
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this), words = text.text().split(/\s+/).reverse(), word, line = [], lineNumber = 0, lineHeight = 1.1, // ems
+        y = text.attr("y"), dy = parseFloat(text.attr("dy")), tspan = text.text(null).append("tspan").attr("x", 10).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan").attr("x", 10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+        }
+    });
+}
 var update = function (source) {
     // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
     var nodes = tree.nodes(root).reverse(), links = tree.links(nodes);
     // Normalize for fixed-depth.  改变各个层级的距离
     nodes.forEach(function (d) {
         //  d.y = d.depth * 180;
-        d.y = d.depth * 180; // translate(180)  0 180 360
+        d.y = d.depth * 280; // translate(180)  0 180 360
     });
     // Update the nodes…
     var node = svg.selectAll("g.node")
@@ -65,21 +81,18 @@ var update = function (source) {
         .attr("height", rectH)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
-        .style("fill", function (d) {
-        return d._children ? "lightsteelblue" : "#fff";
-    });
+        .style("fill", "#fff");
     //添加节点 如果有字节点颜色加深
-    nodeEnter.append("rect")
-        .attr("x", function (datum, index, outerIndex) {
+    nodeEnter.append("circle")
+        .attr("cx", function (datum, index, outerIndex) {
         return rectW;
     })
-        .attr("y", function (datum, index, outerIndex) {
-        return rectH / 2 - 5;
+        .attr("cy", function (datum, index, outerIndex) {
+        return rectH / 2;
     })
-        .attr("width", 10)
-        .attr("height", 10)
         .attr("stroke", "black")
         .attr("stroke-width", 1)
+        .attr("r", 6)
         .style("fill", function (d) {
         return d._children ? "lightsteelblue" : "#fff";
     })
@@ -88,20 +101,22 @@ var update = function (source) {
     nodeEnter.append("text")
         .attr("x", function (d) {
         // return d.children || d._children ? -10 : 10;
-        return rectW / 2;
+        // return rectW / 2;
+        return 0;
     })
         .attr("y", function (d) {
-        return rectH / 2;
+        return 8;
     })
-        .attr("dy", ".35em")
+        .attr("dy", ".55em")
         .attr("text-anchor", function (d) {
         // return d.children || d._children ? "end" : "start";
-        return "middle";
+        return "start";
     })
         .text(function (d) {
         return d.name;
     })
-        .style("fill-opacity", 1e-6);
+        .style("fill-opacity", 1e-6)
+        .call(wrap, 200);
     // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
         .duration(duration)
@@ -109,14 +124,14 @@ var update = function (source) {
         return "translate(" + d.y + "," + d.x + ")";
     });
     nodeUpdate.select("circle")
-        .attr("r", 4.5)
+        .attr("r", 6)
         .style("fill", function (d) {
         return d._children ? "lightsteelblue" : "#fff";
     });
-    nodeUpdate.select('rect')
-        .style("fill", function (d) {
-        return d._children ? "lightsteelblue" : "#fff";
-    });
+    // nodeUpdate.select('rect')
+    //     .style("fill", (d) => {
+    //         return d._children ? "lightsteelblue" : "#fff";
+    //     });
     nodeUpdate.select("text")
         .style("fill-opacity", 1);
     // Transition exiting nodes to the parent's new position.
