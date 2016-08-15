@@ -1,5 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
-var margin = { top: 20, right: 120, bottom: 20, left: 120 }, rectW = 100, rectH = 40, width = 1200, height = 700;
+var margin = { top: 20, right: 120, bottom: 20, left: 120 }, width = 700, height = 700;
 var i = 0, duration = 750, root;
 var zm;
 //Redraw for zoom
@@ -9,21 +9,19 @@ var redraws = function () {
         + " scale(" + d3.event.scale + ")");
 };
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
-zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
+zm.translate([width / 2, height / 2]);
 // var tree = d3.layout.tree().size([height/2, width/2]);
 var tree = d3.layout.tree().nodeSize([70, 30]);
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
-    return [d.y + rectW / 2, d.x + rectH / 2]; // 二次调整 参数
+    return [d.y, d.x];
 });
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
     .call(zm)
     .append("g")
-    .attr("transform", function (d) {
-    return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
-});
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 d3.json("doc.json", function (error, data) {
     if (error)
         throw error;
@@ -61,33 +59,20 @@ var update = function (source) {
         return "translate(" + source.y0 + "," + source.x0 + ")";
     })
         .on("click", click);
-    nodeEnter.append('rect')
-        .attr("width", rectW)
-        .attr("height", rectH)
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
+    //添加节点 如果有字节点颜色加深
+    nodeEnter.append("circle")
+        .attr("r", 1e-6)
         .style("fill", function (d) {
         return d._children ? "lightsteelblue" : "#fff";
     });
-    //添加节点 如果有字节点颜色加深
-    // nodeEnter.append("circle")
-    //     .attr("r", 1e-6)
-    //     .style("fill", (d) => {
-    //         return d._children ? "lightsteelblue" : "#fff";
-    //     });
     // 增加文本   节点文字显示左侧还是右侧
     nodeEnter.append("text")
         .attr("x", function (d) {
-        // return d.children || d._children ? -10 : 10;
-        return rectW / 2;
-    })
-        .attr("y", function (d) {
-        return rectH / 2;
+        return d.children || d._children ? -10 : 10;
     })
         .attr("dy", ".35em")
         .attr("text-anchor", function (d) {
-        // return d.children || d._children ? "end" : "start";
-        return "middle";
+        return d.children || d._children ? "end" : "start";
     })
         .text(function (d) {
         return d.name;
@@ -101,10 +86,6 @@ var update = function (source) {
     });
     nodeUpdate.select("circle")
         .attr("r", 4.5)
-        .style("fill", function (d) {
-        return d._children ? "lightsteelblue" : "#fff";
-    });
-    nodeUpdate.select('rect')
         .style("fill", function (d) {
         return d._children ? "lightsteelblue" : "#fff";
     });

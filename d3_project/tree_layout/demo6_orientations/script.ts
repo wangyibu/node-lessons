@@ -1,6 +1,6 @@
 module test.orientation {
   var margin = { top: 140, right: 10, bottom: 140, left: 10 },
-    width = 240 - margin.left - margin.right,
+    width = 340 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   var orientations = {

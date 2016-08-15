@@ -16,8 +16,11 @@ interface point {
 }
 
 var margin = { top: 20, right: 120, bottom: 20, left: 120 },
-    width = 700,
+    rectW = 100,
+    rectH = 40,
+    width = 1200,
     height = 700;
+
 
 var i = 0,
     duration = 750,
@@ -33,14 +36,14 @@ var redraws = () => {
 }
 
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
-zm.translate([width/2, height/2]);
+zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
 
 // var tree = d3.layout.tree().size([height/2, width/2]);
 var tree = d3.layout.tree().nodeSize([70, 30]);
 
 var diagonal = d3.svg.diagonal()
     .projection((d) => {
-        return [d.y, d.x];
+        return [d.y + rectW / 2, d.x + rectH / 2];  // 二次调整 参数
     });
 
 var svg = d3.select("body").append("svg")
@@ -48,7 +51,9 @@ var svg = d3.select("body").append("svg")
     .attr("height", height)
     .call(zm)
     .append("g")
-    .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
+    .attr("transform", (d) => {
+        return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
+    });
 
 
 d3.json("doc.json", (error, data: point) => {
@@ -97,21 +102,35 @@ var update = (source) => {
         })
         .on("click", click);
 
-    //添加节点 如果有字节点颜色加深
-    nodeEnter.append("circle")
-        .attr("r", 1e-6)
-        .style("fill", (d) => {
+    nodeEnter.append('rect')
+        .attr("width", rectW)
+        .attr("height", rectH)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .style("fill", function (d) {
             return d._children ? "lightsteelblue" : "#fff";
         });
+
+    //添加节点 如果有字节点颜色加深
+    // nodeEnter.append("circle")
+    //     .attr("r", 1e-6)
+    //     .style("fill", (d) => {
+    //         return d._children ? "lightsteelblue" : "#fff";
+    //     });
 
     // 增加文本   节点文字显示左侧还是右侧
     nodeEnter.append("text")
         .attr("x", (d) => {
-            return d.children || d._children ? -10 : 10;
+            // return d.children || d._children ? -10 : 10;
+            return rectW / 2;
+        })
+        .attr("y", (d) => {
+            return rectH / 2;
         })
         .attr("dy", ".35em")
         .attr("text-anchor", (d) => {
-            return d.children || d._children ? "end" : "start";
+            // return d.children || d._children ? "end" : "start";
+            return "middle";
         })
         .text((d) => {
             return d.name;
@@ -127,6 +146,10 @@ var update = (source) => {
 
     nodeUpdate.select("circle")
         .attr("r", 4.5)
+        .style("fill", (d) => {
+            return d._children ? "lightsteelblue" : "#fff";
+        });
+    nodeUpdate.select('rect')
         .style("fill", (d) => {
             return d._children ? "lightsteelblue" : "#fff";
         });

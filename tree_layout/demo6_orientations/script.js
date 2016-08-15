@@ -2,7 +2,7 @@ var test;
 (function (test) {
     var orientation;
     (function (orientation_1) {
-        var margin = { top: 140, right: 10, bottom: 140, left: 10 }, width = 340 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+        var margin = { top: 140, right: 10, bottom: 140, left: 10 }, width = 240 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
         var orientations = {
             "top-to-bottom": {
                 size: [width, height],
