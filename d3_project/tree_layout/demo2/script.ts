@@ -99,8 +99,7 @@ var update = (source) => {
         .attr("class", "node")
         .attr("transform", (d) => {
             return "translate(" + source.y0 + "," + source.x0 + ")";
-        })
-        .on("click", click);
+        });
 
     nodeEnter.append('rect')
         .attr("width", rectW)
@@ -112,11 +111,21 @@ var update = (source) => {
         });
 
     //添加节点 如果有字节点颜色加深
-    // nodeEnter.append("circle")
-    //     .attr("r", 1e-6)
-    //     .style("fill", (d) => {
-    //         return d._children ? "lightsteelblue" : "#fff";
-    //     });
+    nodeEnter.append("rect")
+        .attr("x", (datum, index, outerIndex) => {
+            return rectW;
+        })
+        .attr("y", (datum, index, outerIndex) => {
+            return rectH / 2 - 5;
+        })
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .style("fill", function (d) {
+            return d._children ? "lightsteelblue" : "#fff";
+        })
+        .on("click", click);
 
     // 增加文本   节点文字显示左侧还是右侧
     nodeEnter.append("text")
