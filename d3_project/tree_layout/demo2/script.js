@@ -24,6 +24,14 @@ var svg = d3.select("body").append("svg")
     .attr("transform", function (d) {
     return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
 });
+var clip = svg.append("svg:clipPath")
+    .attr("id", "clip")
+    .append("svg:rect")
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', 200)
+    .attr("height", 60)
+    .attr("id", "clip1");
 d3.json("doc.json", function (error, data) {
     if (error)
         throw error;
@@ -81,7 +89,8 @@ var update = function (source) {
         .attr("height", rectH)
         .attr("stroke", "#2ab3ed")
         .attr("stroke-width", 1)
-        .style("fill", "#e8eef7");
+        .style("fill", "#e8eef7")
+        .attr("clip-path", function (d, i) { return "url(#clip1)"; });
     nodeEnter.append('rect')
         .attr("width", rectW - 1)
         .attr("height", 20)

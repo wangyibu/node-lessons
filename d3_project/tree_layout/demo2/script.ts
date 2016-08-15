@@ -39,11 +39,11 @@ zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
 zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
 
 // var tree = d3.layout.tree().size([height/2, width/2]);
-var tree = d3.layout.tree().nodeSize([200,60]);
+var tree = d3.layout.tree().nodeSize([200, 60]);
 
 var diagonal = d3.svg.diagonal()
     .projection((d) => {
-        return [d.y + rectW , d.x + rectH/2 ];  // 二次调整 参数
+        return [d.y + rectW, d.x + rectH / 2];  // 二次调整 参数
     });
 
 var svg = d3.select("body").append("svg")
@@ -54,6 +54,15 @@ var svg = d3.select("body").append("svg")
     .attr("transform", (d) => {
         return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
     });
+
+var clip = svg.append("svg:clipPath")
+    .attr("id", "clip")
+    .append("svg:rect")
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', 200)
+    .attr("height", 60)
+    .attr("id","clip1");
 
 
 d3.json("doc.json", (error, data: point) => {
@@ -77,27 +86,27 @@ d3.json("doc.json", (error, data: point) => {
 });
 
 function wrap(text, width) {
-  text.each(function() {
-    var text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", 10).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if ((<SVGTextContentElement>tspan.node()).getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", 10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
+    text.each(function () {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            y = text.attr("y"),
+            dy = parseFloat(text.attr("dy")),
+            tspan = text.text(null).append("tspan").attr("x", 10).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if ((<SVGTextContentElement>tspan.node()).getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan").attr("x", 10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+        }
+    });
 }
 
 var update = (source) => {
@@ -131,19 +140,20 @@ var update = (source) => {
         .attr("height", rectH)
         .attr("stroke", "#2ab3ed")
         .attr("stroke-width", 1)
-        .style("fill","#e8eef7");
-    
+        .style("fill", "#e8eef7")
+        .attr("clip-path", function(d,i) { return "url(#clip1)"; });
+
     nodeEnter.append('rect')
-        .attr("width",rectW-1)
-        .attr("height",20)
-        .attr("y",(d)=>{
+        .attr("width", rectW - 1)
+        .attr("height", 20)
+        .attr("y", (d) => {
             return 39.5;
         })
-        .attr("x",(d)=>{
+        .attr("x", (d) => {
             return 0.5;
         })
-        .style("fill","#c8dbf7");
-    
+        .style("fill", "#c8dbf7");
+
     nodeEnter.append("text")
         .attr("x", (d) => {
             return 10;
@@ -170,7 +180,7 @@ var update = (source) => {
         })
         .attr("stroke", "black")
         .attr("stroke-width", 1)
-        .attr("r",6)
+        .attr("r", 6)
         .style("fill", function (d) {
             return d._children ? "lightsteelblue" : "#fff";
         })
@@ -194,7 +204,7 @@ var update = (source) => {
         .text((d) => {
             return d.name;
         })
-        .call(wrap,200);
+        .call(wrap, 200);
 
     // Transition nodes to their new position.  // 增加动画延时
     var nodeUpdate = node.transition()
