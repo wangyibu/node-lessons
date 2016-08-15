@@ -82,6 +82,15 @@ var update = function (source) {
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .style("fill", "#fff");
+    nodeEnter.append('rect')
+        .attr("width", rectW)
+        .attr("height", 20)
+        .attr("stroke", "blue")
+        .attr("stroke-width", 1)
+        .attr("y", function (d) {
+        return 40;
+    })
+        .style("fill", "#fff");
     //添加节点 如果有字节点颜色加深
     nodeEnter.append("circle")
         .attr("cx", function (datum, index, outerIndex) {
