@@ -15,7 +15,7 @@ interface point {
     children: point[];
 }
 
-var margin = { top: 20, right: 120, bottom: 20, left: 120 },
+var margin = { top: 20, right: 40, bottom: 20, left: 40 },
     rectW = 200,
     rectH = 60,
     width = 1200,
@@ -33,10 +33,15 @@ var redraws = () => {
     svg.attr("transform",
         "translate(" + (<d3.ZoomEvent>d3.event).translate + ")"
         + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
+    // 滚动改变字体大小
+    svg.selectAll("text")
+        .style("font-size", (d) => {
+            return 10 / (<d3.ZoomEvent>d3.event).scale < 6 ? 6 : 10 / (<d3.ZoomEvent>d3.event).scale + "px";
+        });
 }
 
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
-zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
+zm.translate([margin.left, (height - rectH) / 2]);
 
 // var tree = d3.layout.tree().size([height/2, width/2]);
 var tree = d3.layout.tree().nodeSize([200, 60]);
@@ -52,7 +57,7 @@ var svg = d3.select("body").append("svg")
     .call(zm)
     .append("g")
     .attr("transform", (d) => {
-        return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
+        return "translate(" + margin.left + "," + (height - rectH) / 2 + ")";
     });
 
 var clip = svg.append("svg:clipPath")
@@ -62,7 +67,7 @@ var clip = svg.append("svg:clipPath")
     .attr('y', 0)
     .attr('width', 200)
     .attr("height", 60)
-    .attr("id","clip1");
+    .attr("id", "clip1");
 
 
 d3.json("doc.json", (error, data: point) => {
@@ -95,7 +100,7 @@ function wrap(text, width) {
             lineHeight = 1.1, // ems
             y = text.attr("y"),
             dy = parseFloat(text.attr("dy")),
-            tspan = text.text(null).append("tspan").attr("x", 10).attr("y", y).attr("dy", dy + "em");
+            tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
         while (word = words.pop()) {
             line.push(word);
             tspan.text(line.join(" "));
@@ -103,7 +108,9 @@ function wrap(text, width) {
                 line.pop();
                 tspan.text(line.join(" "));
                 line = [word];
-                tspan = text.append("tspan").attr("x", 10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                tspan = text.append("tspan").attr("x", (d) => {
+                    return d.textPadding;
+                }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
             }
         }
     });
@@ -140,8 +147,11 @@ var update = (source) => {
         .attr("height", rectH)
         .attr("stroke", "#2ab3ed")
         .attr("stroke-width", 1)
+        .attr("x", (d) => {
+            return d.parent ? 200 : 0;
+        })
         .style("fill", "#e8eef7")
-        .attr("clip-path", function(d,i) { return "url(#clip1)"; });
+        .attr("clip-path", function (d, i) { return "url(#clip1)"; });
 
     nodeEnter.append('rect')
         .attr("width", rectW - 1)
@@ -150,13 +160,13 @@ var update = (source) => {
             return 39.5;
         })
         .attr("x", (d) => {
-            return 0.5;
+            return d.parent ? 200.5 : 0.5;
         })
         .style("fill", "#c8dbf7");
 
     nodeEnter.append("text")
         .attr("x", (d) => {
-            return 10;
+            return d.parent ? 210 : 10;
         })
         .attr("y", (d) => {
             return rectH - 5;
@@ -191,7 +201,13 @@ var update = (source) => {
         .attr("x", (d) => {
             // return d.children || d._children ? -10 : 10;
             // return rectW / 2;
-            return 0;
+            if (d.parent) {
+                d.textPadding = 210;
+                return 210;
+            } else {
+                d.textPadding = 10;
+                return 10;
+            }
         })
         .attr("y", (d) => {
             return 10;
@@ -203,6 +219,9 @@ var update = (source) => {
         })
         .text((d) => {
             return d.name;
+        })
+        .attr("font-size", (d) => {
+            return "10px";
         })
         .call(wrap, 200);
 

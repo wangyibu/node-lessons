@@ -1,5 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
-var margin = { top: 20, right: 120, bottom: 20, left: 120 }, rectW = 200, rectH = 60, width = 1200, height = 700;
+var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1200, height = 700;
 var i = 0, duration = 750, root;
 var zm;
 //Redraw for zoom
@@ -7,9 +7,14 @@ var redraws = function () {
     //console.log("here", d3.event.translate, d3.event.scale);
     svg.attr("transform", "translate(" + d3.event.translate + ")"
         + " scale(" + d3.event.scale + ")");
+    // 滚动改变字体大小
+    svg.selectAll("text")
+        .style("font-size", function (d) {
+        return 10 / d3.event.scale < 6 ? 6 : 10 / d3.event.scale + "px";
+    });
 };
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
-zm.translate([width / 2 - margin.right - margin.left - rectW, height / 2 - margin.top]);
+zm.translate([margin.left, (height - rectH) / 2]);
 // var tree = d3.layout.tree().size([height/2, width/2]);
 var tree = d3.layout.tree().nodeSize([200, 60]);
 var diagonal = d3.svg.diagonal()
@@ -22,7 +27,7 @@ var svg = d3.select("body").append("svg")
     .call(zm)
     .append("g")
     .attr("transform", function (d) {
-    return "translate(" + (width / 2 - margin.right - margin.left - rectW) + "," + (height / 2 - margin.top) + ")";
+    return "translate(" + margin.left + "," + (height - rectH) / 2 + ")";
 });
 var clip = svg.append("svg:clipPath")
     .attr("id", "clip")
@@ -52,7 +57,7 @@ d3.json("doc.json", function (error, data) {
 function wrap(text, width) {
     text.each(function () {
         var text = d3.select(this), words = text.text().split(/\s+/).reverse(), word, line = [], lineNumber = 0, lineHeight = 1.1, // ems
-        y = text.attr("y"), dy = parseFloat(text.attr("dy")), tspan = text.text(null).append("tspan").attr("x", 10).attr("y", y).attr("dy", dy + "em");
+        y = text.attr("y"), dy = parseFloat(text.attr("dy")), tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
         while (word = words.pop()) {
             line.push(word);
             tspan.text(line.join(" "));
@@ -60,7 +65,9 @@ function wrap(text, width) {
                 line.pop();
                 tspan.text(line.join(" "));
                 line = [word];
-                tspan = text.append("tspan").attr("x", 10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                tspan = text.append("tspan").attr("x", function (d) {
+                    return d.textPadding;
+                }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
             }
         }
     });
@@ -89,6 +96,9 @@ var update = function (source) {
         .attr("height", rectH)
         .attr("stroke", "#2ab3ed")
         .attr("stroke-width", 1)
+        .attr("x", function (d) {
+        return d.parent ? 200 : 0;
+    })
         .style("fill", "#e8eef7")
         .attr("clip-path", function (d, i) { return "url(#clip1)"; });
     nodeEnter.append('rect')
@@ -98,12 +108,12 @@ var update = function (source) {
         return 39.5;
     })
         .attr("x", function (d) {
-        return 0.5;
+        return d.parent ? 200.5 : 0.5;
     })
         .style("fill", "#c8dbf7");
     nodeEnter.append("text")
         .attr("x", function (d) {
-        return 10;
+        return d.parent ? 210 : 10;
     })
         .attr("y", function (d) {
         return rectH - 5;
@@ -136,7 +146,14 @@ var update = function (source) {
         .attr("x", function (d) {
         // return d.children || d._children ? -10 : 10;
         // return rectW / 2;
-        return 0;
+        if (d.parent) {
+            d.textPadding = 210;
+            return 210;
+        }
+        else {
+            d.textPadding = 10;
+            return 10;
+        }
     })
         .attr("y", function (d) {
         return 10;
@@ -148,6 +165,9 @@ var update = function (source) {
     })
         .text(function (d) {
         return d.name;
+    })
+        .attr("font-size", function (d) {
+        return "10px";
     })
         .call(wrap, 200);
     // Transition nodes to their new position.  // 增加动画延时
