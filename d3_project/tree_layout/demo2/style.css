@@ -84,15 +84,6 @@ line {
     color: #1181B8;
 }
 
-a:link,
-a:visited {
-    color: steelblue;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #666;
-}
 
 .hint {
     position: absolute;

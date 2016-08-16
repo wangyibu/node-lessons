@@ -1,4 +1,17 @@
 /// <reference path="../../typings/tsd.d.ts" />
+// d3.layout.tree - 整齐地排列树节点。
+// tree.children - 取得或设置孩子访问器。
+// tree.links - 计算树节点的父-子连接。
+// tree.nodeSize - 为每个节点指定一个固定的尺寸。
+// tree.nodes - 计算父布局并返回一组节点。
+// tree.separation - 取得或设置相邻节点的间隔函数。
+// tree.size - 用x和y指定树的尺寸。
+// tree.sort - 控制遍历顺序中兄弟节点的顺序。
+// tree - tree.nodes的别名。
+// interface point {
+//     name: string;
+//     children: point[];
+// }
 var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1200, height = 700;
 var i = 0, duration = 750, root;
 var zm;

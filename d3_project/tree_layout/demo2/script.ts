@@ -10,10 +10,10 @@
 // tree.sort - 控制遍历顺序中兄弟节点的顺序。
 // tree - tree.nodes的别名。
 
-interface point {
-    name: string;
-    children: point[];
-}
+// interface point {
+//     name: string;
+//     children: point[];
+// }
 
 var margin = { top: 20, right: 40, bottom: 20, left: 40 },
     rectW = 200,
@@ -70,7 +70,7 @@ var clip = svg.append("svg:clipPath")
     .attr("id", "clip1");
 
 
-d3.json("doc.json", (error, data: point) => {
+d3.json("doc.json", (error, data) => {
     if (error) throw error;
     root = data;
     root.x0 = 0;   // 最开始的起点展开前x0坐标
