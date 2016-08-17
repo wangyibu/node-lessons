@@ -54,18 +54,21 @@ var test;
             svg.each(function (orientation) {
                 var svg = d3.select(this), o = orientation.value; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 var son = d3.entries(root.children);
-                var new_root = {
+                var leftTree = {
+                    children: []
+                };
+                var rightTree = {
                     children: []
                 };
                 son.forEach(function (d, index, arr) {
                     if (d.value.orientation == 'left') {
-                        new_root.children.push(d.value);
+                        leftTree.children.push(d.value);
                     }
                     else {
-                        arr.splice(index, 1);
+                        rightTree.children.push(d.value);
                     }
                 });
-                console.log(new_root, root);
+                console.log(leftTree, rightTree);
                 // Compute the layout.
                 //   var tree = d3.layout.tree().size(o.size),
                 var tree = d3.layout.tree().nodeSize([30, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知

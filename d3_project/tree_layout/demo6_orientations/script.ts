@@ -80,17 +80,22 @@ module test.orientation {
                 o = orientation.value;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                     
             var son = d3.entries<IChild>(root.children);
-            var new_root = <IChild>{
+            var leftTree = <IChild>{
+                children:[]
+            }
+            var rightTree = <IChild>{
                 children:[]
             }
             son.forEach((d,index,arr)=>{
                 if(d.value.orientation == 'left'){
-                    new_root.children.push(d.value);
+                    leftTree.children.push(d.value);
                 }else{
-                   arr.splice(index,1);
+                   rightTree.children.push(d.value);
                 }
             });
-            console.log(new_root,root);
+
+            
+            console.log(leftTree,rightTree);
             // Compute the layout.
             //   var tree = d3.layout.tree().size(o.size),
             var tree = d3.layout.tree().nodeSize([30, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
