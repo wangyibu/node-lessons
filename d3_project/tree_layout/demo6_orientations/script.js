@@ -2,28 +2,26 @@ var test;
 (function (test) {
     var orientation;
     (function (orientation_1) {
-        var margin = { top: 140, right: 10, bottom: 140, left: 10 }, width = 340 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+        var margin = { top: 10, right: 10, bottom: 10, left: 10 }, width = 400 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
         var orientations = {
-            "top-to-bottom": {
-                size: [width, height],
-                x: function (d) { return d.x; },
-                y: function (d) { return d.y; }
-            },
             "right-to-left": {
                 size: [height, width],
-                x: function (d) { return width - d.y; },
-                y: function (d) { return d.x; }
-            },
-            "bottom-to-top": {
-                size: [width, height],
-                x: function (d) { return d.x; },
-                y: function (d) { return height - d.y; }
+                x: function (d) {
+                    return width - d.y;
+                },
+                y: function (d) {
+                    return d.x;
+                }
             },
             "left-to-right": {
                 size: [height, width],
-                x: function (d) { return d.y; },
-                y: function (d) { return d.x; }
-            }
+                x: function (d) {
+                    return d.y;
+                },
+                y: function (d) {
+                    return d.x;
+                }
+            },
         };
         var svg = d3.select("body").selectAll("svg")
             .data(d3.entries(orientations)) // 转化数组 【 key ： left-to-right   value ：{size:[heigh,width],x:func,y:func}
@@ -32,15 +30,15 @@ var test;
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        svg.append('a')
-            .attr("xlink:href", "http://www.baidu.com")
-            .append("rect")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("class", "border")
-            .on('click', function (datum, index, outerIndex) {
-            console.log(datum, index, outerIndex);
-        });
+        // svg.append('a')
+        //   .attr("xlink:href", "http://www.baidu.com")
+        //   .append("rect")
+        //   .attr("width", width)
+        //   .attr("height", height)
+        //   .attr("class", "border")
+        //   .on('click', function (datum, index: number, outerIndex: number) {
+        //     console.log(datum, index, outerIndex);
+        //   });
         svg.append("text")
             .attr("x", 6)
             .attr("y", 6)

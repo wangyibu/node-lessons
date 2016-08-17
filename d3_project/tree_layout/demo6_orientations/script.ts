@@ -1,29 +1,39 @@
 module test.orientation {
-  var margin = { top: 140, right: 10, bottom: 140, left: 10 },
-    width = 340 - margin.left - margin.right,
+  var margin = { top: 10, right: 10, bottom: 10, left: 10 },
+    width = 400 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   var orientations = {
-    "top-to-bottom": {
-      size: [width, height],
-      x: function (d) { return d.x; },
-      y: function (d) { return d.y; }
-    },
+
     "right-to-left": {
       size: [height, width],
-      x: function (d) { return width - d.y; },
-      y: function (d) { return d.x; }
-    },
-    "bottom-to-top": {
-      size: [width, height],
-      x: function (d) { return d.x; },
-      y: function (d) { return height - d.y; }
+      x: function (d) {
+        return width - d.y;
+      },
+      y: function (d) {
+        return d.x;
+      }
     },
     "left-to-right": {
       size: [height, width],
-      x: function (d) { return d.y; },
-      y: function (d) { return d.x; }
-    }
+      x: function (d) {
+        return d.y;
+      },
+      y: function (d) {
+        return d.x;
+      }
+    },
+    // "top-to-bottom": {                           // 从顶到底
+    //   size: [width, height],                          
+    //   x: function (d) { return d.x; },
+    //   y: function (d) { return d.y; }
+    // },
+
+    // "bottom-to-top": {
+    //   size: [width, height],
+    //   x: function (d) { return d.x; },
+    //   y: function (d) { return height - d.y; }
+    // }
   };
 
   var svg = d3.select("body").selectAll("svg")
@@ -34,15 +44,15 @@ module test.orientation {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  svg.append('a')
-    .attr("xlink:href", "http://www.baidu.com")
-    .append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("class", "border")
-    .on('click', function (datum, index: number, outerIndex: number) {
-      console.log(datum, index, outerIndex);
-    });
+  // svg.append('a')
+  //   .attr("xlink:href", "http://www.baidu.com")
+  //   .append("rect")
+  //   .attr("width", width)
+  //   .attr("height", height)
+  //   .attr("class", "border")
+  //   .on('click', function (datum, index: number, outerIndex: number) {
+  //     console.log(datum, index, outerIndex);
+  //   });
 
 
   svg.append("text")
