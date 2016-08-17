@@ -1,19 +1,25 @@
 module test.orientation {
+
+    interface IChild{
+        children:IChild[];
+        orientation?:string;
+    }
+
     var margin = { top: 10, right: 10, bottom: 10, left: 10 },
         width = 400 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     var orientations = {
 
-        "right-to-left": {
-            size: [height, width],
-            x: function (d) {
-                return width - d.y;
-            },
-            y: function (d) {
-                return d.x;
-            }
-        },
+        // "right-to-left": {
+        //     size: [height, width],
+        //     x: function (d) {
+        //         return width - d.y;
+        //     },
+        //     y: function (d) {
+        //         return d.x;
+        //     }
+        // },
         "left-to-right": {
             size: [height, width],
             x: function (d) {
@@ -47,7 +53,7 @@ module test.orientation {
         })
         .append("g")
         // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        .attr("transform", "translate(" + margin.left + "," + height / 2 + ")");
+        .attr("transform", "translate(" + width/2 + "," + height / 2 + ")");
 
     // svg.append('a')
     //   .attr("xlink:href", "http://www.baidu.com")
@@ -72,12 +78,27 @@ module test.orientation {
         svg.each(function (orientation) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
             var svg = d3.select(this),
                 o = orientation.value;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
-
+                    
+            var son = d3.entries<IChild>(root.children);
+            var new_root = <IChild>{
+                children:[]
+            }
+            son.forEach((d,index,arr)=>{
+                if(d.value.orientation == 'left'){
+                    new_root.children.push(d.value);
+                }else{
+                   arr.splice(index,1);
+                }
+            });
+            console.log(new_root,root);
             // Compute the layout.
             //   var tree = d3.layout.tree().size(o.size),
             var tree = d3.layout.tree().nodeSize([30, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
                 nodes = tree.nodes(root),
                 links = tree.links(nodes);
+            var tree_left = d3.layout.tree().nodeSize([30,200]);
+            var nodes_left = 
+
 
             nodes.forEach((d) => {
                 d.y = d.depth * 80; //  控制每一级别的宽度

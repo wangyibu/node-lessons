@@ -297,7 +297,7 @@ declare namespace d3 {
              * @param value the function to compute data for each node
              */
             datum<NewDatum>(value: (datum: Datum, index: number, outerIndex: number) => NewDatum): Update<NewDatum>;
-            
+
             /**
              * Set the data item for each node in the selection.
              * @param value the constant element to use for each node
@@ -415,7 +415,7 @@ declare namespace d3 {
 
             select(name: (datum: Datum, index: number, outerIndex: number) => EventTarget): Selection<Datum>;
             call(func: (selection: Enter<Datum>, ...args: any[]) => any, ...args: any[]): Enter<Datum>;
-            
+
             empty(): boolean;
             size(): number;
         }
@@ -923,28 +923,28 @@ declare namespace d3 {
         export function flush(): void;
     }
 
-	 interface BaseEvent {
-		 type: string;
-		 sourceEvent?: Event;
-	 }
+    interface BaseEvent {
+        type: string;
+        sourceEvent?: Event;
+    }
 
-	 /**
-	  * Define a D3-specific ZoomEvent per https://github.com/mbostock/d3/wiki/Zoom-Behavior#event
-	  */
-	 interface ZoomEvent extends BaseEvent {
-		 scale: number;
-		 translate: [number, number];
-	 }
+    /**
+     * Define a D3-specific ZoomEvent per https://github.com/mbostock/d3/wiki/Zoom-Behavior#event
+     */
+    interface ZoomEvent extends BaseEvent {
+        scale: number;
+        translate: [number, number];
+    }
 
-	 /**
-	  * Define a D3-specific DragEvent per https://github.com/mbostock/d3/wiki/Drag-Behavior#on
-	  */
-	 interface DragEvent extends BaseEvent {
-		 x: number;
-		 y: number;
-		 dx: number;
-		 dy: number;
-	 }
+    /**
+     * Define a D3-specific DragEvent per https://github.com/mbostock/d3/wiki/Drag-Behavior#on
+     */
+    interface DragEvent extends BaseEvent {
+        x: number;
+        y: number;
+        dx: number;
+        dy: number;
+    }
 
     /**
      * The current event's value. Use this variable in a handler registered with `selection.on`.
@@ -1078,7 +1078,7 @@ declare namespace d3 {
      * Return the min and max simultaneously.
      */
     export function extent<T>(array: T[], accessor: (datum: T, index: number) => string): [string, string];
-    
+
     /**
      * Return the min and max simultaneously.
      */
@@ -1166,7 +1166,7 @@ declare namespace d3 {
     /**
      * Returns an array of key-value pairs containing the property values of the specified object.
      */
-    export function entries(object: Object): { key: string; value: any }[];
+    export function entries<T>(object: Object): { key: string; value: any | T }[];
 
     /**
      * A shim for ES6 maps. The implementation uses a JavaScript object internally, and thus keys are limited to strings.
@@ -1676,7 +1676,7 @@ declare namespace d3 {
         export function category20<Domain extends { toString(): string }>(): Ordinal<Domain, string>;
         export function category20b(): Ordinal<string, string>;
         export function category20b<Domain extends { toString(): string }>(): Ordinal<Domain, string>;
-        export function category20c(): Ordinal<string,string>;
+        export function category20c(): Ordinal<string, string>;
         export function category20c<Domain extends { toString(): string }>(): Ordinal<Domain, string>;
 
         interface Ordinal<Domain extends { toString(): string }, Range> {
@@ -1813,10 +1813,10 @@ declare namespace d3 {
         export function format(specifier: string): Format;
 
         export module format {
-            export function multi(formats: Array<[string, (d: Date) => boolean|number]>): Format;
+            export function multi(formats: Array<[string, (d: Date) => boolean | number]>): Format;
             export function utc(specifier: string): Format;
             namespace utc {
-                export function multi(formats: Array<[string, (d: Date) => boolean|number]>): Format;
+                export function multi(formats: Array<[string, (d: Date) => boolean | number]>): Format;
             }
 
             export var iso: Format;
@@ -2569,7 +2569,7 @@ declare namespace d3 {
 
             tickFormat(): (t: any) => string;
             tickFormat(format: (t: any) => string): Axis;
-            tickFormat(format:string): Axis;
+            tickFormat(format: string): Axis;
         }
 
         export function brush(): Brush<any>;
@@ -2754,7 +2754,7 @@ declare namespace d3 {
         timeFormat: {
             (specifier: string): time.Format;
             utc(specifier: string): time.Format;
-            multi(formats: Array<[string, (d: Date) => boolean|number]>): time.Format;
+            multi(formats: Array<[string, (d: Date) => boolean | number]>): time.Format;
         }
     }
 
