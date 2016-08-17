@@ -29,7 +29,7 @@ var redraws = function () {
 zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
 zm.translate([margin.left, (height - rectH) / 2]);
 // var tree = d3.layout.tree().size([height/2, width/2]);
-var tree = d3.layout.tree().nodeSize([200, 60]);
+var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
 var diagonal = d3.svg.diagonal()
     .projection(function (d) {
     return [d.y + rectW, d.x + rectH / 2]; // 二次调整 参数
@@ -91,7 +91,7 @@ var update = function (source) {
     // Normalize for fixed-depth.  改变各个层级的距离
     nodes.forEach(function (d) {
         //  d.y = d.depth * 180;
-        d.y = d.depth * 280; // translate(180)  0 180 360
+        d.y = d.depth * 240; // translate(180)  0 180 360
     });
     // Update the nodes…
     var node = svg.selectAll("g.node")
