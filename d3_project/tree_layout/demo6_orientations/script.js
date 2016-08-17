@@ -55,10 +55,10 @@ var test;
                 var svg = d3.select(this), o = orientation.value; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 // Compute the layout.
                 //   var tree = d3.layout.tree().size(o.size),
-                var tree = d3.layout.tree().nodeSize([10, 0]), // nodeSize  [height,width] height 两个点之间的垂直距离
+                var tree = d3.layout.tree().nodeSize([30, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离
                 nodes = tree.nodes(root), links = tree.links(nodes);
                 nodes.forEach(function (d) {
-                    d.y = d.depth * 40;
+                    d.y = d.depth * 80;
                 });
                 // Create the link lines.
                 svg.selectAll(".link")
