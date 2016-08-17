@@ -28,8 +28,12 @@ var test;
             .enter().append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
+            .style({
+            'border': '1px solid red',
+            'margin-right': '10px'
+        })
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + height / 2 + ")");
         // svg.append('a')
         //   .attr("xlink:href", "http://www.baidu.com")
         //   .append("rect")
@@ -39,18 +43,23 @@ var test;
         //   .on('click', function (datum, index: number, outerIndex: number) {
         //     console.log(datum, index, outerIndex);
         //   });
-        svg.append("text")
-            .attr("x", 6)
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .text(function (d) { return d.key; });
+        //   svg.append("text")
+        //     .attr("x", 6)
+        //     .attr("y", 6)
+        //     .attr("dy", ".71em")
+        //     .text(function (d) { return d.key; });
         d3.json("doc.json", function (error, root) {
             if (error)
                 throw error;
             svg.each(function (orientation) {
                 var svg = d3.select(this), o = orientation.value; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 // Compute the layout.
-                var tree = d3.layout.tree().size(o.size), nodes = tree.nodes(root), links = tree.links(nodes);
+                //   var tree = d3.layout.tree().size(o.size),
+                var tree = d3.layout.tree().nodeSize([10, 0]), // nodeSize  [height,width] height 两个点之间的垂直距离
+                nodes = tree.nodes(root), links = tree.links(nodes);
+                nodes.forEach(function (d) {
+                    d.y = d.depth * 40;
+                });
                 // Create the link lines.
                 svg.selectAll(".link")
                     .data(links)
