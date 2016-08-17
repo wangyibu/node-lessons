@@ -75,12 +75,12 @@ module test.orientation {
 
             // Compute the layout.
             //   var tree = d3.layout.tree().size(o.size),
-            var tree = d3.layout.tree().nodeSize([30, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离
+            var tree = d3.layout.tree().nodeSize([30, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
                 nodes = tree.nodes(root),
                 links = tree.links(nodes);
 
             nodes.forEach((d) => {
-                d.y = d.depth * 80;
+                d.y = d.depth * 80; //  控制每一级别的宽度
             })
 
             // Create the link lines.
