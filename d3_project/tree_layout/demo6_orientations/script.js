@@ -21,8 +21,26 @@ var test;
                 y: function (d) {
                     return d.x;
                 }
-            },
+            }
         };
+        // 节点宽度和高度
+        var nodeInfo = {
+            heigh: 60,
+            width: 200
+        };
+        var zm;
+        var redraws = function () {
+            //console.log("here", d3.event.translate, d3.event.scale);
+            svg.attr("transform", "translate(" + d3.event.translate + ")"
+                + " scale(" + d3.event.scale + ")");
+            // 滚动改变字体大小
+            svg.selectAll("text")
+                .style("font-size", function (d) {
+                return 10 / d3.event.scale < 6 ? 6 : 10 / d3.event.scale + "px";
+            });
+        };
+        zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
+        zm.translate([0, 0]);
         var svg = d3.select("body")
             .append('svg')
             .attr("width", width + margin.left + margin.right)
@@ -30,33 +48,12 @@ var test;
             .style({
             'border': '1px solid red',
             'margin-right': '10px'
+        }).call(zm)
+            .append("g")
+            .attr("transform", function (d) {
+            return "translate(" + 0 + "," + 0 + ")";
         });
-        // var svg = d3.select("body").selectAll("svg")
-        //     .data(d3.entries(orientations)) // 转化数组 【 key ： left-to-right   value ：{size:[heigh,width],x:func,y:func}
-        //     .enter().append("svg")
-        //     .attr("width", width + margin.left + margin.right)
-        //     .attr("height", height + margin.top + margin.bottom)
-        //     .style({
-        //         'border': '1px solid red',
-        //         'margin-right':'10px'
-        //     })
-        //     .append("g")
-        //     // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        //     .attr("transform", "translate(" + width/2 + "," + height / 2 + ")");
-        // svg.append('a')
-        //   .attr("xlink:href", "http://www.baidu.com")
-        //   .append("rect")
-        //   .attr("width", width)
-        //   .attr("height", height)
-        //   .attr("class", "border")
-        //   .on('click', function (datum, index: number, outerIndex: number) {
-        //     console.log(datum, index, outerIndex);
-        //   });
-        //   svg.append("text")
-        //     .attr("x", 6)
-        //     .attr("y", 6)
-        //     .attr("dy", ".71em")
-        //     .text(function (d) { return d.key; });
+        ;
         d3.json("doc.json", function (error, root) {
             if (error)
                 throw error;
@@ -98,13 +95,12 @@ var test;
                 left: leftTree,
                 right: rightTree
             };
-            // console.log(leftTree, rightTree);
             var gAll = svg.selectAll('g')
                 .data(d3.entries(tree))
                 .enter().append('g')
                 .attr("transform", function (d) {
                 var center = {
-                    x: width / 2,
+                    x: width / 2 + nodeInfo.width / 2,
                     y: height / 2
                 };
                 if (d.key == 'right') {
@@ -134,11 +130,11 @@ var test;
                 var group = d3.select(this), o = node.option; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 // Compute the layout.
                 //   var tree = d3.layout.tree().size(o.size),
-                var tree = d3.layout.tree().nodeSize([30, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+                var tree = d3.layout.tree().nodeSize([50, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
                 nodes = tree.nodes(node), links = tree.links(nodes);
-                var tree_left = d3.layout.tree().nodeSize([30, 200]);
-                var nodes_left = nodes.forEach(function (d) {
-                    d.y = d.depth * 80; //  控制每一级别的宽度
+                // var tree_left = d3.layout.tree().nodeSize([100, 200]);
+                nodes.forEach(function (d) {
+                    d.y = d.depth * 100; //  控制每一级别的宽度
                 });
                 // Create the link lines.
                 group.selectAll(".link")

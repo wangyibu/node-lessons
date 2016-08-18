@@ -35,19 +35,31 @@ module test.orientation {
             y: function (d) {
                 return d.x;
             }
-        },
-        // "top-to-bottom": {                           // 从顶到底
-        //   size: [width, height],
-        //   x: function (d) { return d.x; },
-        //   y: function (d) { return d.y; }
-        // },
-
-        // "bottom-to-top": {
-        //   size: [width, height],
-        //   x: function (d) { return d.x; },
-        //   y: function (d) { return height - d.y; }
-        // }
+        }
     };
+
+    // 节点宽度和高度
+    var nodeInfo = {
+        heigh:60,
+        width:200
+    }
+
+    var zm;
+
+    var redraws = () => {
+        //console.log("here", d3.event.translate, d3.event.scale);
+        svg.attr("transform",
+            "translate(" + (<d3.ZoomEvent>d3.event).translate + ")"
+            + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
+        // 滚动改变字体大小
+        svg.selectAll("text")
+            .style("font-size", (d) => {
+                return 10 / (<d3.ZoomEvent>d3.event).scale < 6 ? 6 : 10 / (<d3.ZoomEvent>d3.event).scale + "px";
+            });
+    }
+
+    zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
+    zm.translate([0, 0]);
 
     var svg = d3.select("body")
         .append('svg')
@@ -56,37 +68,11 @@ module test.orientation {
         .style({
             'border': '1px solid red',
             'margin-right': '10px'
-        });
-
-    // var svg = d3.select("body").selectAll("svg")
-    //     .data(d3.entries(orientations)) // 转化数组 【 key ： left-to-right   value ：{size:[heigh,width],x:func,y:func}
-    //     .enter().append("svg")
-    //     .attr("width", width + margin.left + margin.right)
-    //     .attr("height", height + margin.top + margin.bottom)
-    //     .style({
-    //         'border': '1px solid red',
-    //         'margin-right':'10px'
-    //     })
-    //     .append("g")
-    //     // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    //     .attr("transform", "translate(" + width/2 + "," + height / 2 + ")");
-
-    // svg.append('a')
-    //   .attr("xlink:href", "http://www.baidu.com")
-    //   .append("rect")
-    //   .attr("width", width)
-    //   .attr("height", height)
-    //   .attr("class", "border")
-    //   .on('click', function (datum, index: number, outerIndex: number) {
-    //     console.log(datum, index, outerIndex);
-    //   });
-
-
-    //   svg.append("text")
-    //     .attr("x", 6)
-    //     .attr("y", 6)
-    //     .attr("dy", ".71em")
-    //     .text(function (d) { return d.key; });
+        }).call(zm)
+        .append("g")
+        .attr("transform", (d) => {
+            return "translate(" + 0 + "," + 0 + ")";
+        });;
 
     d3.json("doc.json", function (error, root) {
         if (error) throw error;
@@ -130,22 +116,19 @@ module test.orientation {
             right: rightTree
         }
 
-        // console.log(leftTree, rightTree);
         var gAll = svg.selectAll('g')
             .data(d3.entries<IChild>(tree))
             .enter().append('g')
             .attr("transform", (d) => {
                 var center = {
-                    x : width/2,
-                    y : height/2
+                    x: width / 2 + nodeInfo.width/2,
+                    y: height / 2
                 }
-                if(d.key == 'right'){
+                if (d.key == 'right') {
                     center.x = -center.x;
                 }
                 return "translate(" + center.x + "," + center.y + ")"
             });
-
-
 
 
         // var svg = d3.select("body").selectAll("svg")
@@ -161,7 +144,7 @@ module test.orientation {
         //     // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-        gAll.each(function(allTree){           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
+        gAll.each(function (allTree) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
 
             // if (allTree.key == 'left') {
             //     console.log(allTree.value);
@@ -176,13 +159,17 @@ module test.orientation {
 
             // Compute the layout.
             //   var tree = d3.layout.tree().size(o.size),
-            var tree = d3.layout.tree().nodeSize([30, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+
+            var tree = d3.layout.tree().nodeSize([50, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
                 nodes = tree.nodes(node),
                 links = tree.links(nodes);
-            var tree_left = d3.layout.tree().nodeSize([30, 200]);
-            var nodes_left = nodes.forEach((d) => {
-                    d.y = d.depth * 80; //  控制每一级别的宽度
-                })
+
+
+            // var tree_left = d3.layout.tree().nodeSize([100, 200]);
+
+            nodes.forEach((d) => {
+                d.y = d.depth * 100; //  控制每一级别的宽度
+            })
 
             // Create the link lines.
             group.selectAll(".link")
