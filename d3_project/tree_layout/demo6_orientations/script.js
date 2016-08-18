@@ -53,7 +53,6 @@ var test;
             .attr("transform", function (d) {
             return "translate(" + 0 + "," + 0 + ")";
         });
-        ;
         d3.json("doc.json", function (error, root) {
             if (error)
                 throw error;

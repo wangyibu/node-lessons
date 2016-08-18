@@ -56,9 +56,8 @@ module test.demo2 {
     var margin = { top: 20, right: 40, bottom: 20, left: 40 },
         rectW = 200,
         rectH = 60,
-        width = 1200,
+        width = 1900,
         height = 700;
-
 
     var i = 0,
         duration = 750,
@@ -79,15 +78,16 @@ module test.demo2 {
     }
 
     zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
-    zm.translate([margin.left, (height - rectH) / 2]);
+    // zm.translate([margin.left, (height - rectH) / 2]);
 
     // var tree = d3.layout.tree().size([height/2, width/2]);
-    var tree = d3.layout.tree().nodeSize([100, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+    var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
 
     var diagonal = d3.svg.diagonal()
         .projection((d) => {
             return [d.y + rectW, d.x + rectH / 2];  // 二次调整 参数
         });
+
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -95,7 +95,7 @@ module test.demo2 {
         .call(zm)
         .append("g")
         .attr("transform", (d) => {
-            return "translate(" + margin.left + "," + (height - rectH) / 2 + ")";
+            return "translate(" + 0 + "," + 0 + ")";
         });
 
     var clip = svg.append("svg:clipPath")
@@ -114,6 +114,41 @@ module test.demo2 {
         root.x0 = 0;   // 最开始的起点展开前x0坐标
         root.y0 = 0;   // 最开始的起点展开前y0坐标
 
+        var son = d3.entries<IChild>(root.children);
+
+        var leftTree = <IChild>{
+            children: [],
+            option: {
+                size: [height, width],
+                x: function (d) {
+                    return d.y;
+                },
+                y: function (d) {
+                    return d.x;
+                }
+            }
+        }
+        var rightTree = <IChild>{
+            children: [],
+            option: {
+                size: [height, width],
+                x: function (d) {
+                    return width - d.y;
+                },
+                y: function (d) {
+                    return d.x;
+                }
+            }
+        }
+
+        son.forEach((d, index, arr) => {
+            if (d.value.orientation == 'left') {
+                leftTree.children.push(d.value);
+            } else {
+                rightTree.children.push(d.value);
+            }
+        });
+
 
         // 转化  root 节点 children 字节点 _children
         var collapse = (d) => {
@@ -124,9 +159,89 @@ module test.demo2 {
             }
         }
 
-        data.children.forEach(collapse);
-        update(root);
+        rightTree.children.forEach(collapse);
+        leftTree.children.forEach(collapse);
+
+        var allTree = {
+            left: leftTree,
+            right: rightTree
+        }
+
+
+        var gAll = svg.selectAll('g')
+            .data(d3.entries<IChild>(allTree))
+            .enter()
+            .append('g')
+            .attr('class', (d) => {
+                return d.key;
+            })
+            .attr("transform", (d) => {
+                var center = {
+                    x: width / 2 + rectW / 2,
+                    y: height / 2
+                }
+                if (d.key == 'right') {
+                    center.x = -center.x;
+                }
+                return "translate(" + center.x + "," + center.y + ")"
+            });
+
+        gAll.each(function (allTree) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
+
+            // if (allTree.key == 'left') {
+            //     console.log(allTree.value);
+            // } else {
+            //     console.log(allTree.value);
+            // }
+            var node = <IChild>allTree.value;
+
+            var group = d3.select(this),
+                o = node.option;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
+
+
+            // Compute the layout.
+            //   var tree = d3.layout.tree().size(o.size),
+
+            var tree = d3.layout.tree().nodeSize([50, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+                nodes = tree.nodes(node),
+                links = tree.links(nodes);
+
+
+            // var tree_left = d3.layout.tree().nodeSize([100, 200]);
+
+            nodes.forEach((d) => {
+                d.y = d.depth * 100; //  控制每一级别的宽度
+            })
+
+            // Create the link lines.
+            group.selectAll(".link")
+                .data(links)
+                .enter().append("path")
+                .attr("class", "link")
+                .attr("d", d3.svg.diagonal().projection(
+                    function (d) {
+                        return [o.x(d), o.y(d)];
+                    })
+                );
+
+            // Create the node circles.
+            group.selectAll(".node")
+                .data(nodes)
+                .enter().append("circle")
+                .attr("class", "node")
+                .attr("r", 4.5)
+                .attr("cx", o.x)
+                .attr("cy", o.y);
+        });
+
+
+        // root.children.forEach(collapse);
+        // update(root);
+        update(leftTree);
+        update(rightTree);
     });
+
+
 
     function wrap(text, width) {
         text.each(function () {

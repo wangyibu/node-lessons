@@ -40,8 +40,8 @@ module test.orientation {
 
     // 节点宽度和高度
     var nodeInfo = {
-        heigh:60,
-        width:200
+        heigh: 60,
+        width: 200
     }
 
     var zm;
@@ -72,7 +72,7 @@ module test.orientation {
         .append("g")
         .attr("transform", (d) => {
             return "translate(" + 0 + "," + 0 + ")";
-        });;
+        });
 
     d3.json("doc.json", function (error, root) {
         if (error) throw error;
@@ -121,7 +121,7 @@ module test.orientation {
             .enter().append('g')
             .attr("transform", (d) => {
                 var center = {
-                    x: width / 2 + nodeInfo.width/2,
+                    x: width / 2 + nodeInfo.width / 2,
                     y: height / 2
                 }
                 if (d.key == 'right') {
