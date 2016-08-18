@@ -22,6 +22,10 @@ module test.demo2 {
         children: IChild[];
         orientation?: string;
         option?: IOrientationOption;
+        x?: number;
+        x0?: number;
+        y?: number;
+        y0?: number;
     }
 
     interface IOrientationOption {
@@ -56,7 +60,7 @@ module test.demo2 {
     var margin = { top: 20, right: 40, bottom: 20, left: 40 },
         rectW = 200,
         rectH = 60,
-        width = 1900,
+        width = 1200,
         height = 700;
 
     var i = 0,
@@ -71,17 +75,17 @@ module test.demo2 {
             "translate(" + (<d3.ZoomEvent>d3.event).translate + ")"
             + " scale(" + (<d3.ZoomEvent>d3.event).scale + ")");
         // 滚动改变字体大小
-        svg.selectAll("text")
-            .style("font-size", (d) => {
-                return 10 / (<d3.ZoomEvent>d3.event).scale < 6 ? 6 : 10 / (<d3.ZoomEvent>d3.event).scale + "px";
-            });
+        // svg.selectAll("text")
+        //     .style("font-size", (d) => {
+        //         return 10 / (<d3.ZoomEvent>d3.event).scale < 6 ? 6 : 10 / (<d3.ZoomEvent>d3.event).scale + "px";
+        //     });
     }
 
     zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
     // zm.translate([margin.left, (height - rectH) / 2]);
 
     // var tree = d3.layout.tree().size([height/2, width/2]);
-    var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+    //var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
 
     var diagonal = d3.svg.diagonal()
         .projection((d) => {
@@ -111,10 +115,10 @@ module test.demo2 {
     d3.json("doc.json", (error, data) => {
         if (error) throw error;
         root = data;
-        root.x0 = 0;   // 最开始的起点展开前x0坐标
-        root.y0 = 0;   // 最开始的起点展开前y0坐标
+        // root.x0 = 0;   // 最开始的起点展开前x0坐标
+        // root.y0 = 0;   // 最开始的起点展开前y0坐标
 
-        var son = d3.entries<IChild>(root.children);
+        var convertData = d3.entries<IChild>(data.children);
 
         var leftTree = <IChild>{
             children: [],
@@ -126,7 +130,11 @@ module test.demo2 {
                 y: function (d) {
                     return d.x;
                 }
-            }
+            },
+            x0: 0,
+            y0: 0,
+            x: 0,
+            y: 0
         }
         var rightTree = <IChild>{
             children: [],
@@ -138,10 +146,14 @@ module test.demo2 {
                 y: function (d) {
                     return d.x;
                 }
-            }
+            },
+            x0: 0,
+            y0: 0,
+            x: 0,
+            y: 0
         }
 
-        son.forEach((d, index, arr) => {
+        convertData.forEach((d, index, arr) => {
             if (d.value.orientation == 'left') {
                 leftTree.children.push(d.value);
             } else {
@@ -170,11 +182,8 @@ module test.demo2 {
 
         var gAll = svg.selectAll('g')
             .data(d3.entries<IChild>(allTree))
-            .enter()
-            .append('g')
-            .attr('class', (d) => {
-                return d.key;
-            })
+            .enter().append('g')
+            .attr('class', (d) => { return d.key; })
             .attr("transform", (d) => {
                 var center = {
                     x: width / 2 + rectW / 2,
@@ -186,16 +195,16 @@ module test.demo2 {
                 return "translate(" + center.x + "," + center.y + ")"
             });
 
-        gAll.each(function (allTree) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
+        gAll.each(function (d) {           // each(func: (datum: Datum, index: number, outerIndex: number) => any): Selection<Datum>;
 
             // if (allTree.key == 'left') {
             //     console.log(allTree.value);
             // } else {
             //     console.log(allTree.value);
             // }
-            var node = <IChild>allTree.value;
+            var node = <IChild>d.value;
 
-            var group = d3.select(this),
+            var nodeEnter = d3.select(this),
                 o = node.option;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
 
 
@@ -214,7 +223,7 @@ module test.demo2 {
             })
 
             // Create the link lines.
-            group.selectAll(".link")
+            nodeEnter.selectAll(".link")
                 .data(links)
                 .enter().append("path")
                 .attr("class", "link")
@@ -225,7 +234,7 @@ module test.demo2 {
                 );
 
             // Create the node circles.
-            group.selectAll(".node")
+            nodeEnter.selectAll(".node")
                 .data(nodes)
                 .enter().append("circle")
                 .attr("class", "node")
@@ -233,14 +242,38 @@ module test.demo2 {
                 .attr("cx", o.x)
                 .attr("cy", o.y);
 
-            update(node);
-            // update(rightTree);
+            nodeEnter.selectAll("rect")
+                .data(nodes)
+                .enter().append('rect')
+                .attr("width", rectW)
+                .attr("height", rectH)
+                .attr("stroke", "#2ab3ed")
+                .attr("stroke-width", 1)
+                .attr("y", d3.svg.diagonal.projection(function(d)=>{
+                    o.x(d),
+                    o.y(d);
+                }))
+                .attr("x",(d)=>{
+                    return d.x ? d.x - rectH/2 : rectH/2;
+                })
+                .style("fill", "#e8eef7")
+                .attr("clip-path", function (d, i) { return "url(#clip1)"; });
+                // .attr("d", d3.svg.diagonal().projection(
+                //     function (d) {
+                //         return [o.x(d), o.y(d)];
+                //     })
+                // );;
+
+
+
+            // update(node);
+            // update(node);
         });
 
 
         // root.children.forEach(collapse);
         // update(root);
-      
+
     });
 
 

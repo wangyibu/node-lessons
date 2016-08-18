@@ -154,7 +154,7 @@ module test.demo2 {
         });
     }
 
-    var update = (source) => {
+    var update = (src) => {
 
 
         // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
@@ -177,7 +177,7 @@ module test.demo2 {
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
             .attr("transform", (d) => {
-                return "translate(" + source.y0 + "," + source.x0 + ")";
+                return "translate(" + src.y0 + "," + src.x0 + ")";
             });
 
         nodeEnter.append('rect')
@@ -287,7 +287,7 @@ module test.demo2 {
         var nodeExit = node.exit().transition()
             .duration(duration)
             .attr("transform", (d) => {
-                return "translate(" + source.y + "," + source.x + ")";
+                return "translate(" + src.y + "," + src.x + ")";
             })
             .remove();
 
@@ -302,12 +302,12 @@ module test.demo2 {
             .data<any>(links, (d) => {
                 return d.target.id;
             });
-
+ 
         // Enter any new links at the parent's previous position.
         link.enter().insert("path", "g")
             .attr("class", "link")
             .attr("d", (d) => {
-                var o = { x: source.x0, y: source.y0 };
+                var o = { x: src.x0, y: src.y0 };
                 return diagonal({ source: o, target: o });
             });
 
@@ -320,7 +320,7 @@ module test.demo2 {
         link.exit().transition()
             .duration(duration)
             .attr("d", (d) => {
-                var o = { x: source.x, y: source.y };
+                var o = { x: src.x, y: src.y };
                 return diagonal({ source: o, target: o });
             })
             .remove();

@@ -109,7 +109,7 @@ var test;
                 }
             });
         }
-        var update = function (source) {
+        var update = function (src) {
             // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
             var nodes = tree.nodes(root).reverse(), links = tree.links(nodes);
             // Normalize for fixed-depth.  改变各个层级的距离
@@ -126,7 +126,7 @@ var test;
             var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
                 .attr("transform", function (d) {
-                return "translate(" + source.y0 + "," + source.x0 + ")";
+                return "translate(" + src.y0 + "," + src.x0 + ")";
             });
             nodeEnter.append('rect')
                 .attr("width", rectW)
@@ -228,7 +228,7 @@ var test;
             var nodeExit = node.exit().transition()
                 .duration(duration)
                 .attr("transform", function (d) {
-                return "translate(" + source.y + "," + source.x + ")";
+                return "translate(" + src.y + "," + src.x + ")";
             })
                 .remove();
             nodeExit.select("circle")
@@ -244,7 +244,7 @@ var test;
             link.enter().insert("path", "g")
                 .attr("class", "link")
                 .attr("d", function (d) {
-                var o = { x: source.x0, y: source.y0 };
+                var o = { x: src.x0, y: src.y0 };
                 return diagonal({ source: o, target: o });
             });
             // Transition links to their new position.
@@ -255,7 +255,7 @@ var test;
             link.exit().transition()
                 .duration(duration)
                 .attr("d", function (d) {
-                var o = { x: source.x, y: source.y };
+                var o = { x: src.x, y: src.y };
                 return diagonal({ source: o, target: o });
             })
                 .remove();

@@ -36,7 +36,7 @@ var test;
                 }
             }
         };
-        var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1900, height = 700;
+        var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1200, height = 700;
         var i = 0, duration = 750, root;
         var zm;
         //Redraw for zoom
@@ -45,15 +45,15 @@ var test;
             svg.attr("transform", "translate(" + d3.event.translate + ")"
                 + " scale(" + d3.event.scale + ")");
             // 滚动改变字体大小
-            svg.selectAll("text")
-                .style("font-size", function (d) {
-                return 10 / d3.event.scale < 6 ? 6 : 10 / d3.event.scale + "px";
-            });
+            // svg.selectAll("text")
+            //     .style("font-size", (d) => {
+            //         return 10 / (<d3.ZoomEvent>d3.event).scale < 6 ? 6 : 10 / (<d3.ZoomEvent>d3.event).scale + "px";
+            //     });
         };
         zm = d3.behavior.zoom().scaleExtent([0.5, 10]).on("zoom", redraws);
         // zm.translate([margin.left, (height - rectH) / 2]);
         // var tree = d3.layout.tree().size([height/2, width/2]);
-        var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+        //var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
         var diagonal = d3.svg.diagonal()
             .projection(function (d) {
             return [d.y + rectW, d.x + rectH / 2]; // 二次调整 参数
@@ -78,9 +78,9 @@ var test;
             if (error)
                 throw error;
             root = data;
-            root.x0 = 0; // 最开始的起点展开前x0坐标
-            root.y0 = 0; // 最开始的起点展开前y0坐标
-            var son = d3.entries(root.children);
+            // root.x0 = 0;   // 最开始的起点展开前x0坐标
+            // root.y0 = 0;   // 最开始的起点展开前y0坐标
+            var convertData = d3.entries(data.children);
             var leftTree = {
                 children: [],
                 option: {
@@ -91,7 +91,11 @@ var test;
                     y: function (d) {
                         return d.x;
                     }
-                }
+                },
+                x0: 0,
+                y0: 0,
+                x: 0,
+                y: 0
             };
             var rightTree = {
                 children: [],
@@ -103,9 +107,13 @@ var test;
                     y: function (d) {
                         return d.x;
                     }
-                }
+                },
+                x0: 0,
+                y0: 0,
+                x: 0,
+                y: 0
             };
-            son.forEach(function (d, index, arr) {
+            convertData.forEach(function (d, index, arr) {
                 if (d.value.orientation == 'left') {
                     leftTree.children.push(d.value);
                 }
@@ -129,11 +137,8 @@ var test;
             };
             var gAll = svg.selectAll('g')
                 .data(d3.entries(allTree))
-                .enter()
-                .append('g')
-                .attr('class', function (d) {
-                return d.key;
-            })
+                .enter().append('g')
+                .attr('class', function (d) { return d.key; })
                 .attr("transform", function (d) {
                 var center = {
                     x: width / 2 + rectW / 2,
@@ -144,14 +149,14 @@ var test;
                 }
                 return "translate(" + center.x + "," + center.y + ")";
             });
-            gAll.each(function (allTree) {
+            gAll.each(function (d) {
                 // if (allTree.key == 'left') {
                 //     console.log(allTree.value);
                 // } else {
                 //     console.log(allTree.value);
                 // }
-                var node = allTree.value;
-                var group = d3.select(this), o = node.option; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
+                var node = d.value;
+                var nodeEnter = d3.select(this), o = node.option; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
                 // Compute the layout.
                 //   var tree = d3.layout.tree().size(o.size),
                 var tree = d3.layout.tree().nodeSize([50, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
@@ -161,7 +166,7 @@ var test;
                     d.y = d.depth * 100; //  控制每一级别的宽度
                 });
                 // Create the link lines.
-                group.selectAll(".link")
+                nodeEnter.selectAll(".link")
                     .data(links)
                     .enter().append("path")
                     .attr("class", "link")
@@ -169,15 +174,36 @@ var test;
                     return [o.x(d), o.y(d)];
                 }));
                 // Create the node circles.
-                group.selectAll(".node")
+                nodeEnter.selectAll(".node")
                     .data(nodes)
                     .enter().append("circle")
                     .attr("class", "node")
                     .attr("r", 4.5)
                     .attr("cx", o.x)
                     .attr("cy", o.y);
-                update(node);
-                // update(rightTree);
+                nodeEnter.selectAll("rect")
+                    .data(nodes)
+                    .enter().append('rect')
+                    .attr("width", rectW)
+                    .attr("height", rectH)
+                    .attr("stroke", "#2ab3ed")
+                    .attr("stroke-width", 1)
+                    .attr("y", d3.svg.diagonal.projection(, {
+                    o: .x(d),
+                    o: .y(d)
+                }))
+                    .attr("x", function (d) {
+                    return d.x ? d.x - rectH / 2 : rectH / 2;
+                })
+                    .style("fill", "#e8eef7")
+                    .attr("clip-path", function (d, i) { return "url(#clip1)"; });
+                // .attr("d", d3.svg.diagonal().projection(
+                //     function (d) {
+                //         return [o.x(d), o.y(d)];
+                //     })
+                // );;
+                // update(node);
+                // update(node);
             });
             // root.children.forEach(collapse);
             // update(root);
