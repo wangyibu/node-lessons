@@ -176,11 +176,11 @@ var test;
                     .attr("r", 4.5)
                     .attr("cx", o.x)
                     .attr("cy", o.y);
+                update(node);
+                // update(rightTree);
             });
             // root.children.forEach(collapse);
             // update(root);
-            update(leftTree);
-            update(rightTree);
         });
         function wrap(text, width) {
             text.each(function () {
@@ -202,7 +202,7 @@ var test;
         }
         var update = function (source) {
             // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
-            var nodes = tree.nodes(root).reverse(), links = tree.links(nodes);
+            var nodes = tree.nodes(root), links = tree.links(nodes);
             // Normalize for fixed-depth.  改变各个层级的距离
             nodes.forEach(function (d) {
                 //  d.y = d.depth * 180;
