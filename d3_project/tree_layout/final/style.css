@@ -93,6 +93,13 @@ line {
     color: #999;
 }
 
+.node-point{
+    cursor: pointer;
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
 .node circle {
     cursor: pointer;
     fill: #fff;
@@ -114,4 +121,8 @@ svg{
     margin: 0;
     border: 1px solid #369;
     box-sizing: border-box;
+}
+
+.treeRightToLeft{
+    opacity: 0;
 }
