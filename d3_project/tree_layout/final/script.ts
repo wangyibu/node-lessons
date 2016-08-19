@@ -242,21 +242,21 @@ module test.demo2 {
                 .attr("cx", o.x)
                 .attr("cy", o.y);
 
-            nodeEnter.selectAll("rect")
-                .data(nodes)
-                .enter().append('rect')
-                .attr("width", rectW)
-                .attr("height", rectH)
-                .attr("stroke", "#2ab3ed")
-                .attr("stroke-width", 1)
-                .attr("y", (d) => {
-                    return d.y ? d.y - rectW / 2 : rectW / 2;
-                })
-                .attr("x", (d) => {
-                    return d.x ? d.x - rectH / 2 : rectH / 2;
-                })
-                .style("fill", "#e8eef7")
-                .attr("clip-path", function (d, i) { return "url(#clip1)"; });
+            // nodeEnter.selectAll("rect")
+            //     .data(nodes)
+            //     .enter().append('rect')
+            //     .attr("width", rectW)
+            //     .attr("height", rectH)
+            //     .attr("stroke", "#2ab3ed")
+            //     .attr("stroke-width", 1)
+            //     .attr("y", (d) => {
+            //         return d.y ? d.y - rectW / 2 : rectW / 2;
+            //     })
+            //     .attr("x", (d) => {
+            //         return d.x ? d.x - rectH / 2 : rectH / 2;
+            //     })
+            //     .style("fill", "#e8eef7")
+            //     .attr("clip-path", function (d, i) { return "url(#clip1)"; });
             // .attr("d", d3.svg.diagonal().projection(
             //     function (d) {
             //         return [o.x(d), o.y(d)];
