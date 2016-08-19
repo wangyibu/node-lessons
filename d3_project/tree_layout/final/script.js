@@ -188,10 +188,9 @@ var test;
                     .attr("height", rectH)
                     .attr("stroke", "#2ab3ed")
                     .attr("stroke-width", 1)
-                    .attr("y", d3.svg.diagonal.projection(, {
-                    o: .x(d),
-                    o: .y(d)
-                }))
+                    .attr("y", function (d) {
+                    return d.y ? d.y - rectW / 2 : rectW / 2;
+                })
                     .attr("x", function (d) {
                     return d.x ? d.x - rectH / 2 : rectH / 2;
                 })
