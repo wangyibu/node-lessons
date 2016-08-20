@@ -37,7 +37,7 @@ var test;
             }
         };
         var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1200, height = 700;
-        var i = 0, duration = 750, root;
+        var i = 0, duration = 3000, root;
         var zm;
         //Redraw for zoom
         var redraws = function () {

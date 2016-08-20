@@ -11,21 +11,21 @@ module test.orientation {
     }
 
     var orientations = {
-        "top-to-bottom": {
-            size: [width, height],
-            x: function (d) { return d.x; },
-            y: function (d) { return d.y; }
-        },
+        // "top-to-bottom": {
+        //     size: [width, height],
+        //     x: function (d) { return d.x; },
+        //     y: function (d) { return d.y; }
+        // },
         "right-to-left": {
             size: [height, width],
             x: function (d) { return width - d.y; },
             y: function (d) { return d.x; }
         },
-        "bottom-to-top": {
-            size: [width, height],
-            x: function (d) { return d.x; },
-            y: function (d) { return height - d.y; }
-        },
+        // "bottom-to-top": {
+        //     size: [width, height],
+        //     x: function (d) { return d.x; },
+        //     y: function (d) { return height - d.y; }
+        // },
         "left-to-right": {
             size: [height, width],
             x: function (d) { return d.y; },

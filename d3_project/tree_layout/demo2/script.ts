@@ -61,7 +61,7 @@ module test.demo2 {
 
 
     var i = 0,
-        duration = 750,
+        duration = 3000,
         root;
     var zm;
 

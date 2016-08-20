@@ -4,21 +4,21 @@ var test;
     (function (orientation_1) {
         var margin = { top: 140, right: 10, bottom: 140, left: 10 }, width = 240 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
         var orientations = {
-            "top-to-bottom": {
-                size: [width, height],
-                x: function (d) { return d.x; },
-                y: function (d) { return d.y; }
-            },
+            // "top-to-bottom": {
+            //     size: [width, height],
+            //     x: function (d) { return d.x; },
+            //     y: function (d) { return d.y; }
+            // },
             "right-to-left": {
                 size: [height, width],
                 x: function (d) { return width - d.y; },
                 y: function (d) { return d.x; }
             },
-            "bottom-to-top": {
-                size: [width, height],
-                x: function (d) { return d.x; },
-                y: function (d) { return height - d.y; }
-            },
+            // "bottom-to-top": {
+            //     size: [width, height],
+            //     x: function (d) { return d.x; },
+            //     y: function (d) { return height - d.y; }
+            // },
             "left-to-right": {
                 size: [height, width],
                 x: function (d) { return d.y; },
