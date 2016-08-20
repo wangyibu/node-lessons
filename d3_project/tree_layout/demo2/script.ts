@@ -158,8 +158,8 @@ module test.demo2 {
 
 
         // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
-        var nodes = tree.nodes(root).reverse(),
-            links = tree.links(nodes);
+        var nodes = tree.nodes(root).reverse();
+        var links = tree.links(nodes);
 
         // Normalize for fixed-depth.  改变各个层级的距离
         nodes.forEach((d) => {

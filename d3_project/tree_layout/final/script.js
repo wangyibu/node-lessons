@@ -17,23 +17,25 @@ var test;
     var demo2;
     (function (demo2) {
         var orientations = {
+            // "top-to-bottom": {
+            //     size: [width, height],
+            //     x: function (d) { return d.x; },
+            //     y: function (d) { return d.y; }
+            // },
             "right-to-left": {
                 size: [height, width],
-                x: function (d) {
-                    return width - d.y;
-                },
-                y: function (d) {
-                    return d.x;
-                }
+                x: function (d) { return width - d.y; },
+                y: function (d) { return d.x; }
             },
+            // "bottom-to-top": {
+            //     size: [width, height],
+            //     x: function (d) { return d.x; },
+            //     y: function (d) { return height - d.y; }
+            // },
             "left-to-right": {
                 size: [height, width],
-                x: function (d) {
-                    return d.y;
-                },
-                y: function (d) {
-                    return d.x;
-                }
+                x: function (d) { return d.y; },
+                y: function (d) { return d.x; }
             }
         };
         var margin = { top: 20, right: 40, bottom: 20, left: 40 }, rectW = 200, rectH = 60, width = 1200, height = 700;
@@ -81,6 +83,7 @@ var test;
             // root.x0 = 0;   // 最开始的起点展开前x0坐标
             // root.y0 = 0;   // 最开始的起点展开前y0坐标
             var convertData = d3.entries(data.children);
+            // 从左到右的树
             var leftTree = {
                 children: [],
                 option: {
@@ -97,6 +100,7 @@ var test;
                 x: 0,
                 y: 0
             };
+            // 从右到左的树
             var rightTree = {
                 children: [],
                 option: {
@@ -150,37 +154,37 @@ var test;
                 return "translate(" + center.x + "," + center.y + ")";
             });
             gAll.each(function (d) {
-                // if (allTree.key == 'left') {
-                //     console.log(allTree.value);
-                // } else {
-                //     console.log(allTree.value);
-                // }
                 var node = d.value;
-                var nodeEnter = d3.select(this), o = node.option; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
+                var treeLR = d3.select(this), oRient = node.option; // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
+                console.log(oRient);
                 // Compute the layout.
                 //   var tree = d3.layout.tree().size(o.size),
                 var tree = d3.layout.tree().nodeSize([50, 200]), // nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
-                nodes = tree.nodes(node), links = tree.links(nodes);
-                // var tree_left = d3.layout.tree().nodeSize([100, 200]);
-                nodes.forEach(function (d) {
+                treeNodes = tree.nodes(node), links = tree.links(treeNodes);
+                treeNodes.forEach(function (d) {
                     d.y = d.depth * 100; //  控制每一级别的宽度
                 });
-                // Create the link lines.
-                nodeEnter.selectAll(".link")
+                // 绘制曲线
+                treeLR.selectAll(".link")
                     .data(links)
                     .enter().append("path")
                     .attr("class", "link")
                     .attr("d", d3.svg.diagonal().projection(function (d) {
-                    return [o.x(d), o.y(d)];
+                    return [oRient.x(d), oRient.y(d)];
                 }));
+                // 每组G node
+                var nodes = treeLR.selectAll('g.node')
+                    .data(treeNodes)
+                    .enter().append('g')
+                    .attr('class', 'node');
+                // var tree_left = d3.layout.tree().nodeSize([100, 200]);
                 // Create the node circles.
-                nodeEnter.selectAll(".node")
-                    .data(nodes)
-                    .enter().append("circle")
+                nodes.append("circle")
                     .attr("class", "node")
                     .attr("r", 4.5)
-                    .attr("cx", o.x)
-                    .attr("cy", o.y);
+                    .attr("cx", oRient.x)
+                    .attr("cy", oRient.y);
+                // Create the link lines.
                 // nodeEnter.selectAll("rect")
                 //     .data(nodes)
                 //     .enter().append('rect')

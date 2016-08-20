@@ -1,14 +1,14 @@
 {
-  "name": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
+  "name": "Under Armour|安德玛中国官网 root",
   "children": [
     {
-      "name": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "name": "UA男子新品推荐装备 - level2",
       "free": true,
-      "description": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "description": "UA男子新品推荐装备 - level2",
       "children": [
         {
-          "name": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网",
-          "description": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网",
+          "name": "UA男子运动鞋,训练鞋- level3",
+          "description": "UA男子运动鞋,训练鞋- level3",
           "free": true,
           "pageTitle": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网牌",
           "originalUrl": "",
@@ -16,7 +16,7 @@
           "pageViewPercentage": 30
         },
         {
-          "name": "Desktop",
+          "name": "UA男子运动鞋,训练鞋- level3",
           "description": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
           "free": true,
           "pageTitle": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
@@ -25,43 +25,43 @@
           "pageViewPercentage": 70
         }
       ],
-      "pageTitle": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "pageTitle": "UA男子新品推荐装备 - level2",
       "originalUrl": "",
       "pageCatagor": "",
       "pageViewPercentage": 100
     },
     {
-      "name": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "name": "UA男子新品推荐装备 - level2",
       "free": true,
-      "description": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "description": "UA男子新品推荐装备 - level2",
       "children": [
         {
-          "name": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网",
-          "description": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网",
+          "name": "UA男子运动鞋,训练鞋- level3 ",
+          "description": "UA男子运动鞋,训练鞋- level3 ",
           "free": true,
-          "pageTitle": "UA男子运动鞋,训练鞋- Under Armour|安德玛中国官网牌",
+          "pageTitle": "UA男子运动鞋,训练鞋- level3 牌",
           "originalUrl": "",
           "pageCatagor": "",
           "pageViewPercentage": 30
         },
         {
-          "name": "Desktop",
-          "description": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
+          "name": "UA男子运动鞋 level3",
+          "description": "level3  ",
           "free": true,
-          "pageTitle": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
+          "pageTitle": "level3 UA男子运动鞋",
           "originalUrl": "",
           "pageCatagor": "",
           "pageViewPercentage": 70
         }
       ],
-      "pageTitle": "UA男子新品推荐装备 - Under Armour|安德玛中国官网",
+      "pageTitle": "UA男子新品推荐装备 - level2",
       "originalUrl": "",
       "pageCatagor": "",
       "pageViewPercentage": 100
     }
   ],
-  "description": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
-  "pageTitle": "Under Armour|安德玛中国官网 - UA运动品牌专卖，美国高端运动科技品牌",
+  "description": "Under Armour|安德玛中国官网 - root",
+  "pageTitle": "Under Armour|安德玛中国官网 - root",
   "originalUrl": "",
   "pageCatagor": "",
   "pageViewPercentage": null
