@@ -224,13 +224,6 @@ var test;
                     else {
                         return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
                     }
-                    // if (d._children) {
-                    //     d.y0 = d.y;
-                    //     d.x0 = d.x;
-                    //     return "translate(" + d.y + "," + (d.x - rectH / 2) + ")";
-                    // } else {
-                    //     return "translate(" + (d.y0 - rectW) + "," + (d.x0 - rectH / 2) + ")";
-                    // }
                 });
                 nodes.forEach(function (d) {
                     d.y = d.depth * 100; //  控制每一级别的宽度
@@ -323,7 +316,17 @@ var test;
                 gNode.append("circle")
                     .attr("class", "node-point")
                     .attr("r", 4.5)
-                    .attr("cx", rectW)
+                    .attr("cx", function (d) {
+                    if (nodeData.orientation == 'left' && d._children) {
+                        return d.y - rectW / 2;
+                    }
+                    else if (nodeData.orientation == 'right' && d.children) {
+                        return d.y;
+                    }
+                    else {
+                        return rectW;
+                    }
+                })
                     .attr("cy", rectH / 2)
                     .style("fill", function (d) {
                     return d._children ? "lightsteelblue" : "#fff";

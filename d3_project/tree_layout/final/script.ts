@@ -389,7 +389,15 @@ module test.demo2 {
             gNode.append("circle")
                 .attr("class", "node-point")
                 .attr("r", 4.5)
-                .attr("cx", rectW)
+                .attr("cx", (d: any) => {
+                    if (nodeData.orientation == 'left' && d._children) {
+                        return d.y - rectW / 2;
+                    } else if (nodeData.orientation == 'right' && d.children) {
+                        return d.y;
+                    } else {
+                        return rectW;
+                    }
+                })
                 .attr("cy", rectH / 2)
                 // .attr("cx", o.x)
                 // .attr("cy", o.y)
