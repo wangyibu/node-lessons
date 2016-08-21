@@ -161,6 +161,7 @@ module test.demo2 {
         var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
 
+
         // Normalize for fixed-depth.  改变各个层级的距离
         nodes.forEach((d) => {
             //  d.y = d.depth * 180;
@@ -302,7 +303,7 @@ module test.demo2 {
             .data<any>(links, (d) => {
                 return d.target.id;
             });
- 
+
         // Enter any new links at the parent's previous position.
         link.enter().insert("path", "g")
             .attr("class", "link")
