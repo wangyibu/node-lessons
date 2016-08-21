@@ -36,17 +36,6 @@ module test.demo2 {
     }
 
     var orientations = {
-
-        // 从有到左
-        "right-to-left": {
-            size: [height, width],
-            x: function (d) {
-                return width - d.y;
-            },
-            y: function (d) {
-                return d.x;
-            }
-        },
         //从左到右
         "left-to-right": {
             size: [height, width],
@@ -56,7 +45,18 @@ module test.demo2 {
             y: function (d) {
                 return d.x;
             }
+        },
+        // 从有到左
+        "right-to-left": {
+            size: [height, width],
+            x: function (d) {
+                return width - d.y;
+            },
+            y: function (d) {
+                return d.x;
+            }
         }
+
     };
 
 
@@ -121,19 +121,21 @@ module test.demo2 {
         // root.x0 = 0;   // 最开始的起点展开前x0坐标
         // root.y0 = 0;   // 最开始的起点展开前y0坐标
 
+        var orientation = d3.entries<IChild>(orientations);
+
         var convertData = d3.entries<IChild>(data.children);
 
         var leftTree = <IChild>{
             children: [],
-            option: {
-                size: [height, width],
-                x: function (d) {
-                    return d.y;
-                },
-                y: function (d) {
-                    return d.x;
-                }
-            },
+            // option: {
+            //     size: [height, width],
+            //     x: function (d) {
+            //         return d.y;
+            //     },
+            //     y: function (d) {
+            //         return d.x;
+            //     }
+            // },
             x0: 0,
             y0: 0,
             x: 0,
@@ -147,15 +149,15 @@ module test.demo2 {
         }
         var rightTree = <IChild>{
             children: [],
-            option: {
-                size: [height, width],
-                x: function (d) {
-                    return width - d.y;
-                },
-                y: function (d) {
-                    return d.x;
-                }
-            },
+            // option: {
+            //     size: [height, width],
+            //     x: function (d) {
+            //         return width - d.y;
+            //     },
+            //     y: function (d) {
+            //         return d.x;
+            //     }
+            // },
             x0: 0,
             y0: 0,
             x: 0,
@@ -169,14 +171,16 @@ module test.demo2 {
         }
 
         convertData.forEach((d, index, arr) => {
-            if (d.value.orientation == 'left') {
+            if (index > 2) {
                 leftTree.children.push(d.value);
+                leftTree.orientation = 'left';
+                leftTree.option = orientation[0].value;
             } else {
                 rightTree.children.push(d.value);
+                rightTree.orientation = 'right';
+                rightTree.option = orientation[1].value;
             }
         });
-
-
         // 转化  root 节点 children 字节点 _children
         var collapse = (d) => {
             if (d.children) {
@@ -185,13 +189,34 @@ module test.demo2 {
                 d.children = null;
             }
         }
+        // rightTree.children.forEach((d)=>{
+        //     d.orientation = 'right';
+        // })
+        // leftTree.children.forEach((d)=>{
+        //     d.orientation = 'left';
+        // })
+
 
         rightTree.children.forEach(collapse);
         leftTree.children.forEach(collapse);
 
+        var orientFun = function (d) {
+            for (var i = 0; i < d.length; i++) {
+                d[i].orientation = this.orientation;
+                if (d[i]._children) {
+                    orientFun.call(d[i], d[i]._children);
+                }
+            }
+        }
+
+        orientFun.call(rightTree, rightTree.children);
+        orientFun.call(leftTree, leftTree.children);
+
+        console.log(rightTree, leftTree);
+
         var allTree = {
             left: leftTree,
-            right: rightTree
+            right: rightTree,
         }
 
 
@@ -239,29 +264,6 @@ module test.demo2 {
                 nodes = tree.nodes(nodeData),
                 links = tree.links(nodes);
 
-            nodeEnter.selectAll('g.node')
-                .data(nodes)
-                .enter().append('g')
-                .attr('class', 'node')
-                .attr("transform", (d:any) => {
-                    if(d._children){
-                        d.y0 = d.y;
-                        d.x0 = d.x;
-                        return "translate(" + d.y + "," + d.x + ")";
-                    }else{
-                        return "translate(" + d.y0 + "," + d.x0 + ")";
-                    }
-                    
-                })
-
-
-            // var tree_left = d3.layout.tree().nodeSize([100, 200]);
-
-            nodes.forEach((d) => {
-                d.y = d.depth * 100; //  控制每一级别的宽度
-            })
-
-            // Create the link lines.
             nodeEnter.selectAll(".link")
                 .data(links)
                 .enter().append("path")
@@ -271,25 +273,34 @@ module test.demo2 {
                         return [o.x(d), o.y(d)];
                     })
                 );
-            // 最外层框
-            nodeEnter.selectAll(".outsideBox")
+
+            var gNode = nodeEnter.selectAll('g.node')
                 .data(nodes)
-                .enter().append('rect')
+                .enter().append('g')
+                .attr('class', 'node')
+                .attr("transform", (d: IChild) => {
+                    if (d._children) {
+                        d.y0 = d.y;
+                        d.x0 = d.x;
+                        return "translate(" + d.y + "," + (d.x - rectH / 2) + ")";
+                    } else {
+                        return "translate(" + (d.y0 - rectW) + "," + (d.x0 - rectH / 2) + ")";
+                    }
+                });
+
+
+            nodes.forEach((d) => {
+                d.y = d.depth * 100; //  控制每一级别的宽度
+            })
+
+            // Create the link lines.
+
+            // 最外层框
+            gNode.append('rect')
                 .attr("width", rectW)
                 .attr("height", rectH)
                 .attr("stroke", "#2ab3ed")
                 .attr("stroke-width", 1)
-                .attr("x", (d: IChild) => {
-                    if (mainTree.key == 'left') {
-                        return d._children ? d.y : d.y - rectW;
-                    } else {
-                        var x = o.size[0] + d.y + rectW / 2;
-                        return d._children ? x : x + rectW * 2;
-                    }
-                })
-                .attr("y", (d) => {
-                    return d.x - rectH / 2;
-                })
                 .style("fill", "#e8eef7")
                 .attr("class", (d: IChild) => {
                     if (mainTree.key == 'left') {
@@ -302,76 +313,68 @@ module test.demo2 {
 
             // 文字
             // 增加文本   节点文字显示左侧还是右侧
-            nodeEnter.selectAll('.description')
-                .data(nodes)
-                .enter()
-                .append("text")
-                .attr("x", (d: any) => {
-                    if (mainTree.key == 'left') {
-                        return d.textPadding = d._children ? d.y + 0.5 : d.y - rectW + 0.5;
-                    } else {
-                        var x = o.size[0] + d.y + rectW / 2;
-                        return d.textPadding = d._children ? x + 0.5 : x + rectW * 2 + 0.5;
-                    }
-                })
-                .attr("y", (d) => {
-                    // return 10;
-                    return d.x - rectH / 2 + 10;
-                })
-                .attr("dy", ".55em")
-                .attr("text-anchor", (d) => {
-                    // return d.children || d._children ? "end" : "start";
-                    return "start";
-                })
-                .text((d: any) => {
-                    return d.name;
-                })
-                .attr("font-size", (d) => {
-                    return "10px";
-                })
-                .call(wrap, 200);
+            // gNode.append("text")
+            //     .attr("x", (d: any) => {
+            //         if (mainTree.key == 'left') {
+            //             return d.textPadding = d._children ? d.y + 0.5 : d.y - rectW + 0.5;
+            //         } else {
+            //             var x = o.size[0] + d.y + rectW / 2;
+            //             return d.textPadding = d._children ? x + 0.5 : x + rectW * 2 + 0.5;
+            //         }
+            //     })
+            //     .attr("y", (d) => {
+            //         // return 10;
+            //         return d.x - rectH / 2 + 10;
+            //     })
+            //     .attr("dy", ".55em")
+            //     .attr("text-anchor", (d) => {
+            //         // return d.children || d._children ? "end" : "start";
+            //         return "start";
+            //     })
+            //     .text((d: any) => {
+            //         return d.name;
+            //     })
+            //     .attr("font-size", (d) => {
+            //         return "10px";
+            //     })
+            //     .call(wrap, 200);
 
             // 内部矩形
-            nodeEnter.selectAll(".insideBox")
-                .data(nodes)
-                .enter().append('rect')
-                .attr("width", rectW - 1)
-                .attr("height", 20)
-                .attr("x", (d: IChild) => {
-                    if (mainTree.key == 'left') {
-                        return d._children ? d.y + 0.5 : d.y - rectW + 0.5;
-                    } else {
-                        var x = o.size[0] + d.y + rectW / 2;
-                        return d._children ? x + 0.5 : x + rectW * 2 + 0.5;
-                    }
-                })
-                .attr("y", (d: IChild) => {
-                    return d.x - rectH / 2 + 0.5 + 39;
-                })
-                .style("fill", "#c8dbf7");
+            // gNode.append('rect')
+            //     .attr("width", rectW - 1)
+            //     .attr("height", 20)
+            //     .attr("x", (d: IChild) => {
+            //         if (mainTree.key == 'left') {
+            //             return d._children ? d.y + 0.5 : d.y - rectW + 0.5;
+            //         } else {
+            //             var x = o.size[0] + d.y + rectW / 2;
+            //             return d._children ? x + 0.5 : x + rectW * 2 + 0.5;
+            //         }
+            //     })
+            //     .attr("y", (d: IChild) => {
+            //         return d.x - rectH / 2 + 0.5 + 39;
+            //     })
+            //     .style("fill", "#c8dbf7");
 
             // 内部矩形文字
-            nodeEnter.selectAll(".insideBoxText")
-                .data(nodes)
-                .enter()
-                .append("text")
-                .attr("x", (d: IChild) => {
-                    if (mainTree.key == 'left') {
-                        return d._children ? d.y + 0.5 : d.y + 0.5 - rectW;
-                    } else {
-                        var x = o.size[0] + d.y + rectW / 2;
-                        return d._children ? x + 0.5 : x + 0.5 + rectW * 2;
-                    }
-                })
-                .attr("y", (d) => {
-                    return d.x - rectH / 2 + 0.5 + 55;
-                })
-                .attr("text-anchor", (d) => {
-                    return "start";
-                })
-                .text((d) => {
-                    return "页面访问量:34333112";
-                });
+            // gNode.append("text")
+            //     .attr("x", (d: IChild) => {
+            //         if (mainTree.key == 'left') {
+            //             return d._children ? d.y + 0.5 : d.y + 0.5 - rectW;
+            //         } else {
+            //             var x = o.size[0] + d.y + rectW / 2;
+            //             return d._children ? x + 0.5 : x + 0.5 + rectW * 2;
+            //         }
+            //     })
+            //     .attr("y", (d) => {
+            //         return d.x - rectH / 2 + 0.5 + 55;
+            //     })
+            //     .attr("text-anchor", (d) => {
+            //         return "start";
+            //     })
+            //     .text((d) => {
+            //         return "页面访问量:34333112";
+            //     });
 
             // nodeUpdate.select("circle")
             // .attr("r", 6)
@@ -381,16 +384,17 @@ module test.demo2 {
 
 
             // Create the node circles.
-            nodeEnter.selectAll(".node-point")
-                .data(nodes)
-                .enter().append("circle")
+            gNode.append("circle")
                 .attr("class", "node-point")
                 .attr("r", 4.5)
-                .attr("cx", o.x)
-                .attr("cy", o.y)
+                .attr("cx", rectW)
+                .attr("cy", rectH / 2)
+                // .attr("cx", o.x)
+                // .attr("cy", o.y)
                 .style("fill", (d: IChild) => {
                     return d._children ? "lightsteelblue" : "#fff";
-                });
+                })
+                .on('click', click);
 
             // var nodeUpdate = nodeEnter.transition()
             //     .duration(duration)
@@ -418,7 +422,7 @@ module test.demo2 {
             //     .attr("stroke", "#2ab3ed")
             //     .attr("stroke-width", 1)
             //     .attr("y", d3.svg.diagonal.projection(function(d)=>{
-            //         o.x(d)  
+            //         o.x(d)
             //         o.y(d);
             //     }))
             //     .attr("x",(d)=>{
