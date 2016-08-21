@@ -283,20 +283,11 @@ module test.demo2 {
                 .attr("transform", (d: IChild) => {
                     d.x0 = o.x(d);
                     d.y0 = o.y(d);
-                    if((nodeData.orientation == 'left' && d._children)|| (nodeData.orientation == 'right' && d.children)){
+                    if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
                         return "translate(" + (o.x(d)) + "," + (o.y(d) - rectH / 2) + ")";
-                    }else{
+                    } else {
                         return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
                     }
-
-
-                    // if (d._children) {
-                    //     d.y0 = d.y;
-                    //     d.x0 = d.x;
-                    //     return "translate(" + d.y + "," + (d.x - rectH / 2) + ")";
-                    // } else {
-                    //     return "translate(" + (d.y0 - rectW) + "," + (d.x0 - rectH / 2) + ")";
-                    // }
                 });
 
 
