@@ -272,46 +272,30 @@ var test;
                 //         return "10px";
                 //     })
                 //     .call(wrap, 200);
-                // 内部矩形
-                // gNode.append('rect')
-                //     .attr("width", rectW - 1)
-                //     .attr("height", 20)
-                //     .attr("x", (d: IChild) => {
-                //         if (mainTree.key == 'left') {
-                //             return d._children ? d.y + 0.5 : d.y - rectW + 0.5;
-                //         } else {
-                //             var x = o.size[0] + d.y + rectW / 2;
-                //             return d._children ? x + 0.5 : x + rectW * 2 + 0.5;
-                //         }
-                //     })
-                //     .attr("y", (d: IChild) => {
-                //         return d.x - rectH / 2 + 0.5 + 39;
-                //     })
-                //     .style("fill", "#c8dbf7");
-                // 内部矩形文字
-                // gNode.append("text")
-                //     .attr("x", (d: IChild) => {
-                //         if (mainTree.key == 'left') {
-                //             return d._children ? d.y + 0.5 : d.y + 0.5 - rectW;
-                //         } else {
-                //             var x = o.size[0] + d.y + rectW / 2;
-                //             return d._children ? x + 0.5 : x + 0.5 + rectW * 2;
-                //         }
-                //     })
-                //     .attr("y", (d) => {
-                //         return d.x - rectH / 2 + 0.5 + 55;
-                //     })
-                //     .attr("text-anchor", (d) => {
-                //         return "start";
-                //     })
-                //     .text((d) => {
-                //         return "页面访问量:34333112";
-                //     });
                 // nodeUpdate.select("circle")
                 // .attr("r", 6)
                 // .style("fill", (d) => {
                 //     return d._children ? "lightsteelblue" : "#fff";
                 // });
+                var insideGroup = gNode.append('g')
+                    .attr("transform", function (d) {
+                    return "translate(" + 0.5 + "," + 39.5 + ")";
+                });
+                // 内部矩形
+                insideGroup.append('rect')
+                    .attr("width", rectW - 1)
+                    .attr("height", 20)
+                    .style("fill", "#c8dbf7");
+                // 内部矩形文字
+                insideGroup.append("text")
+                    .attr('x', 3)
+                    .attr("dy", 15)
+                    .attr("text-anchor", function (d) {
+                    return "start";
+                })
+                    .text(function (d) {
+                    return "页面访问量:34333112";
+                });
                 // Create the node circles.
                 gNode.append("circle")
                     .attr("class", "node-point")
