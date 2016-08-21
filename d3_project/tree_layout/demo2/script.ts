@@ -176,6 +176,9 @@ module test.demo2 {
         // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
+            .attr("class", d => {
+                return "id" + d.depth;
+            })
             .attr("transform", (d) => {
                 return "translate(" + src.y0 + "," + src.x0 + ")";
             });
@@ -302,7 +305,7 @@ module test.demo2 {
             .data<any>(links, (d) => {
                 return d.target.id;
             });
- 
+
         // Enter any new links at the parent's previous position.
         link.enter().insert("path", "g")
             .attr("class", "link")

@@ -3,17 +3,20 @@ var test;
     var orientation;
     (function (orientation_1) {
         var margin = { top: 140, right: 10, bottom: 140, left: 10 }, width = 240 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+        var duration = 750; // 动画延时
+        var diagonal = d3.svg.diagonal()
+            .projection(function (d) { return [d.y, d.x]; });
         var orientations = {
             // "top-to-bottom": {
             //     size: [width, height],
             //     x: function (d) { return d.x; },
             //     y: function (d) { return d.y; }
             // },
-            "right-to-left": {
-                size: [height, width],
-                x: function (d) { return width - d.y; },
-                y: function (d) { return d.x; }
-            },
+            // "right-to-left": {
+            //     size: [height, width],
+            //     x: function (d) { return width - d.y; },
+            //     y: function (d) { return d.x; }
+            // },
             // "bottom-to-top": {
             //     size: [width, height],
             //     x: function (d) { return d.x; },
@@ -46,6 +49,8 @@ var test;
             if (error)
                 throw error;
             root = data;
+            root.x0 = 0;
+            root.y0 = 0;
             var collapse = function (d) {
                 if (d.children) {
                     d._children = d.children;
@@ -58,38 +63,84 @@ var test;
             svg.each(function (orientation) {
                 var group = d3.select(this), o = orientation.value;
                 // Compute the layout.
-                var tree = d3.layout.tree().size(o.size);
-                var nodes = tree.nodes(root).reverse();
-                var links = tree.links(nodes);
-                // 转化  root 节点 children 字节点 _children
-                // nodes.forEach(d=>{
-                //     return d.children.forEach(collapse);
-                // });
-                // Create the link lines.
-                group.selectAll(".link")
-                    .data(links)
-                    .enter().append("path")
-                    .attr("class", "link")
-                    .attr("d", d3.svg.diagonal()
-                    .projection(function (d) {
-                    return [o.x(d), o.y(d)];
-                }));
-                var svg = group.selectAll('g.node')
-                    .data(nodes)
-                    .enter()
-                    .append('g')
-                    .attr('class', function (d) {
-                    return 'node';
-                })
-                    .attr("transform", function (d) {
-                    var x = o.x(d);
-                    var y = o.y(d);
-                    return "translate(" + x + "," + y + ")";
-                });
-                // Create the node circles.
-                svg.append("circle")
-                    .attr("class", "node")
-                    .attr("r", 4.5);
+                update(root);
+                function update(src) {
+                    var tree = d3.layout.tree().size(o.size);
+                    var nodes = tree.nodes(root).reverse();
+                    var links = tree.links(nodes);
+                    // 转化  root 节点 children 字节点 _children
+                    // nodes.forEach(d=>{
+                    //     return d.children.forEach(collapse);
+                    // });
+                    nodes.forEach(function (d) {
+                        return d.y = d.depth * 100;
+                    });
+                    // var linkNode = group.selectAll("path.link")
+                    //     .data(links);
+                    //     linkNode.enter().insert("path",)
+                    // Create the link lines.
+                    var linkNode = group.selectAll("path.link")
+                        .data(links)
+                        .enter().append("path")
+                        .attr("class", "link")
+                        .attr("d", d3.svg.diagonal()
+                        .projection(function (d) {
+                        return [o.x(d), o.y(d)];
+                    }));
+                    // var linkUpdate = linkNode.transition()
+                    //     .duration(duration)
+                    //     .attr('transform', d3.svg.diagonal()
+                    //         .projection(d => {
+                    //             return [o.x(d), o.y(d)];
+                    //         })
+                    //     );
+                    var gNode = group.selectAll('g.node')
+                        .data(nodes)
+                        .enter()
+                        .append('g')
+                        .attr('class', function (d) {
+                        return 'node';
+                    })
+                        .attr("transform", function (d) {
+                        if (d._children) {
+                            var x = o.x(d.parent);
+                            var y = o.y(d.parent);
+                            return "translate(" + x + "," + y + ")";
+                        }
+                        else {
+                            var x = o.x(d);
+                            var y = o.y(d);
+                            return "translate(" + x + "," + y + ")";
+                        }
+                    });
+                    var nodeUpdate = gNode.transition()
+                        .duration(duration)
+                        .attr("transform", function (d) {
+                        var x = o.x(d);
+                        var y = o.y(d);
+                        return "translate(" + x + "," + y + ")";
+                    });
+                    var click = function (d) {
+                        if (d.children) {
+                            d._children = d.children;
+                            d.children = null;
+                        }
+                        else {
+                            d.children = d._children;
+                            d._children = null;
+                        }
+                        update(d);
+                    };
+                    // Create the node circles.
+                    gNode.append("circle")
+                        .attr("class", "node")
+                        .attr("r", 4.5)
+                        .on('click', click);
+                    nodes.forEach(function (d) {
+                        d.x0 = d.x;
+                        d.y0 = d.y;
+                    });
+                }
             });
         });
     })(orientation = test.orientation || (test.orientation = {}));

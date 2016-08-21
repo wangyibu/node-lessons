@@ -126,6 +126,9 @@ var test;
             // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
             var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
+                .attr("class", function (d) {
+                return "id" + d.depth;
+            })
                 .attr("transform", function (d) {
                 return "translate(" + src.y0 + "," + src.x0 + ")";
             });
