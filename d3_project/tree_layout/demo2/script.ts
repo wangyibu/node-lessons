@@ -59,7 +59,6 @@ module test.demo2 {
         width = 1200,
         height = 700;
 
-
     var i = 0,
         duration = 750,
         root;

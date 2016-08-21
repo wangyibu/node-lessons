@@ -35,6 +35,15 @@ module test.demo2 {
         y(d: any): number;
     }
 
+
+
+
+    var margin = { top: 20, right: 40, bottom: 20, left: 40 },
+        rectW = 200,
+        rectH = 60,
+        width = 1200,
+        height = 700;
+
     var orientations = {
         //从左到右
         "left-to-right": {
@@ -58,13 +67,6 @@ module test.demo2 {
         }
 
     };
-
-
-    var margin = { top: 20, right: 40, bottom: 20, left: 40 },
-        rectW = 200,
-        rectH = 60,
-        width = 1200,
-        height = 700;
 
     var i = 0,
         duration = 750,
@@ -200,9 +202,11 @@ module test.demo2 {
         rightTree.children.forEach(collapse);
         leftTree.children.forEach(collapse);
 
+        // 对每棵树定义orientation = left 、 right
         var orientFun = function (d) {
             for (var i = 0; i < d.length; i++) {
                 d[i].orientation = this.orientation;
+                d[i].option = this.option;
                 if (d[i]._children) {
                     orientFun.call(d[i], d[i]._children);
                 }
@@ -211,8 +215,6 @@ module test.demo2 {
 
         orientFun.call(rightTree, rightTree.children);
         orientFun.call(leftTree, leftTree.children);
-
-        console.log(rightTree, leftTree);
 
         var allTree = {
             left: leftTree,
@@ -224,7 +226,7 @@ module test.demo2 {
             .data(d3.entries<IChild>(allTree))
             .enter().append('g')
             .attr('class', (d) => { return d.key; })
-            .attr("transform", (d) => {
+            .attr("transform", (d: { key: string; value: IChild }) => {
                 var center = {
                     x: width / 2 + rectW / 2,
                     y: height / 2
@@ -244,7 +246,7 @@ module test.demo2 {
             // }
             var nodeData = <IChild>mainTree.value;
 
-
+            console.log(nodeData.orientation);
 
             var nodeEnter = d3.select(this),
                 o = nodeData.option;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
@@ -279,13 +281,22 @@ module test.demo2 {
                 .enter().append('g')
                 .attr('class', 'node')
                 .attr("transform", (d: IChild) => {
-                    if (d._children) {
-                        d.y0 = d.y;
-                        d.x0 = d.x;
-                        return "translate(" + d.y + "," + (d.x - rectH / 2) + ")";
-                    } else {
-                        return "translate(" + (d.y0 - rectW) + "," + (d.x0 - rectH / 2) + ")";
+                    d.x0 = o.x(d);
+                    d.y0 = o.y(d);
+                    if((nodeData.orientation == 'left' && d._children)|| (nodeData.orientation == 'right' && d.children)){
+                        return "translate(" + (o.x(d)) + "," + (o.y(d) - rectH / 2) + ")";
+                    }else{
+                        return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
                     }
+
+
+                    // if (d._children) {
+                    //     d.y0 = d.y;
+                    //     d.x0 = d.x;
+                    //     return "translate(" + d.y + "," + (d.x - rectH / 2) + ")";
+                    // } else {
+                    //     return "translate(" + (d.y0 - rectW) + "," + (d.x0 - rectH / 2) + ")";
+                    // }
                 });
 
 
