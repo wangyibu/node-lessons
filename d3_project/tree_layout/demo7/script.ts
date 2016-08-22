@@ -16,9 +16,12 @@ module demo7 {
 
     var zm;
 
+    var root;
+
 
 
     d3.json('doc.json', (err: any, data: any) => {
+        root = data;
         data.x0 = 0;
         data.y0 = 0;
 
@@ -54,7 +57,7 @@ module demo7 {
     function updates(source) {
 
         // Compute the new tree layout.
-        var nodes = tree.nodes(source).reverse(),
+        var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
 
         // Normalize for fixed-depth.

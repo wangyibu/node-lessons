@@ -84,8 +84,14 @@ module test.demo2 {
     var tree = d3.layout.tree().nodeSize([100, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
 
     var diagonal = d3.svg.diagonal()
+        .source(function (d) {
+            return { "x": d.source.x, "y": d.source.y + rectW / 2 };
+        })
+        .target(function (d) {
+            return { "x": d.target.x, "y": d.target.y - rectW / 2 };
+        })
         .projection((d) => {
-            return [d.y + rectW, d.x + rectH / 2];  // 二次调整 参数
+            return [d.y, d.x];  // 二次调整 参数
         });
 
     var svg = d3.select("body").append("svg")
@@ -165,6 +171,7 @@ module test.demo2 {
         nodes.forEach((d) => {
             //  d.y = d.depth * 180;
             d.y = d.depth * 340;     // translate(180)  0 180 360
+            d.y0 = rectW/2;
         });
 
         // Update the nodes…
@@ -190,47 +197,47 @@ module test.demo2 {
             .attr("height", rectH)
             .attr("stroke", "#2ab3ed")
             .attr("stroke-width", 1)
-            .attr("x", (d) => {
-                return d.parent ? 200 - rectW / 2 : rectW / 2;
-            })
+            // .attr("x", (d) => {
+            //     return d.parent ? 200 - rectW / 2 : rectW / 2;
+            // })
             .style("fill", "#e8eef7")
             .attr("clip-path", function (d, i) { return "url(#clip1)"; });
 
         nodeEnter.append('rect')
             .attr("width", rectW - 1)
             .attr("height", 20)
-            .attr("y", (d) => {
-                return 39.5;
-            })
-            .attr("x", (d) => {
-                return d.parent ? 200.5 - rectW / 2 : 0.5 + rectW / 2;
-            })
+            // .attr("y", (d) => {
+            //     return 39.5;
+            // })
+            // .attr("x", (d) => {
+            //     return d.parent ? 200.5 - rectW / 2 : 0.5 + rectW / 2;
+            // })
             .style("fill", "#c8dbf7");
 
-        nodeEnter.append("text")
-            .attr("x", (d) => {
-                return d.parent ? 210 - rectW / 2 : 10 + rectW / 2;
-            })
-            .attr("y", (d) => {
-                return rectH - 5;
-            })
-            .attr("text-anchor", (d) => {
-                // return d.children || d._children ? "end" : "start";
-                return "start";
-            })
-            .text((d) => {
-                return "页面访问量:34333112";
-            })
-            .style("fill-opacity", 1e-6);
+        // nodeEnter.append("text")
+        //     .attr("x", (d) => {
+        //         return d.parent ? 210 - rectW / 2 : 10 + rectW / 2;
+        //     })
+        //     .attr("y", (d) => {
+        //         return rectH - 5;
+        //     })
+        //     .attr("text-anchor", (d) => {
+        //         // return d.children || d._children ? "end" : "start";
+        //         return "start";
+        //     })
+        //     .text((d) => {
+        //         return "页面访问量:34333112";
+        //     })
+        //     .style("fill-opacity", 1e-6);
 
         //添加节点 如果有字节点颜色加深
         nodeEnter.append("circle")
-            .attr("cx", (datum, index, outerIndex) => {
-                return rectW + rectW / 2;
-            })
-            .attr("cy", (datum, index, outerIndex) => {
-                return rectH / 2;
-            })
+            // .attr("cx", (datum, index, outerIndex) => {
+            //     return rectW + rectW / 2;
+            // })
+            // .attr("cy", (datum, index, outerIndex) => {
+            //     return rectH / 2;
+            // })
             .attr("stroke", "black")
             .attr("stroke-width", 1)
             .attr("r", 6)
@@ -240,36 +247,36 @@ module test.demo2 {
             .on("click", click);
 
         // 增加文本   节点文字显示左侧还是右侧
-        nodeEnter.append("text")
-            .attr("x", (d) => {
-                // return d.children || d._children ? -10 : 10;
-                // return rectW / 2;
-                if (d.parent) {
-                    d.textPadding = 210 - rectW / 2;
-                    return d.textPadding;
-                } else {
-                    d.textPadding = 10 + rectW / 2;
-                    return d.textPadding;
-                }
-            })
-            .attr("y", (d) => {
-                return 10;
-            })
-            .attr("dy", ".55em")
-            .attr("text-anchor", (d) => {
-                // return d.children || d._children ? "end" : "start";
-                return "start";
-            })
-            .text((d) => {
-                return d.name;
-            })
-            .attr("font-size", (d) => {
-                return "10px";
-            })
-            .call(wrap, 200);
+        // nodeEnter.append("text")
+        //     .attr("x", (d) => {
+        //         // return d.children || d._children ? -10 : 10;
+        //         // return rectW / 2;
+        //         if (d.parent) {
+        //             d.textPadding = 210 - rectW / 2;
+        //             return d.textPadding;
+        //         } else {
+        //             d.textPadding = 10 + rectW / 2;
+        //             return d.textPadding;
+        //         }
+        //     })
+        //     .attr("y", (d) => {
+        //         return 10;
+        //     })
+        //     .attr("dy", ".55em")
+        //     .attr("text-anchor", (d) => {
+        //         // return d.children || d._children ? "end" : "start";
+        //         return "start";
+        //     })
+        //     .text((d) => {
+        //         return d.name;
+        //     })
+        //     .attr("font-size", (d) => {
+        //         return "10px";
+        //     })
+        //     .call(wrap, 200);
 
         // Transition nodes to their new position.  // 增加动画延时
-        
+
 
         nodeUpdate.select("circle")
             .attr("r", 6)
@@ -303,6 +310,8 @@ module test.demo2 {
             .data<any>(links, (d) => {
                 return d.target.id;
             });
+
+
 
         // Enter any new links at the parent's previous position.
         link.enter().insert("path", "g")

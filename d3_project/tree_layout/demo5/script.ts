@@ -105,7 +105,7 @@ module demo5 {
                         "size": 5842
                     }
                 ]
-            },{
+            }, {
                 "name": "analytics2",
                 "children": [
                     {
@@ -188,7 +188,7 @@ module demo5 {
         ]
     }
 
-    var tree = d3.layout.tree().nodeSize([45,0]); //  value1 上下跨度为 value2   
+    var tree = d3.layout.tree().nodeSize([45, 0]); //  value1 上下跨度为 value2   
 
     var diagonal = d3.svg.diagonal()
         .projection(function (d) {
@@ -226,8 +226,9 @@ module demo5 {
 
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
-            d.y = d.depth * 180;
+            d.y = 180 * d.depth;
         });
+
 
         // Update the nodes…
         var node = svg.selectAll("g.node")

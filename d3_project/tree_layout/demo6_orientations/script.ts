@@ -168,15 +168,24 @@ module test.orientation {
             // var tree_left = d3.layout.tree().nodeSize([100, 200]);
 
             nodes.forEach((d) => {
-                d.y = d.depth * 100; //  控制每一级别的宽度
+                d.y = d.depth * 300; //  控制每一级别的宽度
             })
+
+            var rectW = 40;
 
             // Create the link lines.
             group.selectAll(".link")
                 .data(links)
                 .enter().append("path")
                 .attr("class", "link")
-                .attr("d", d3.svg.diagonal().projection(
+                .attr("d", d3.svg.diagonal()
+                    .source(function (d) {
+                        return { "x": d.source.x, "y": d.source.y + rectW / 2 };
+                    })
+                    .target(function (d) {
+                        return { "x": d.target.x, "y": d.target.y - rectW / 2 };
+                    })
+                    .projection(
                     function (d) {
                         return [o.x(d), o.y(d)];
                     })

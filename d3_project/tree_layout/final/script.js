@@ -57,6 +57,14 @@ var test;
         // var tree = d3.layout.tree().size([height/2, width/2]);
         //var tree = d3.layout.tree().nodeSize([70, 200]); //nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
         var diagonal = d3.svg.diagonal()
+            .source(function (d) {
+            console.log(d);
+            return { "x": d.source.x, "y": d.source.y + rectW / 2 };
+        })
+            .target(function (d) {
+            console.log(d);
+            return { "x": d.target.x, "y": d.target.y - rectW / 2 };
+        })
             .projection(function (d) {
             return [d.y + rectW, d.x + rectH / 2]; // 二次调整 参数
         });

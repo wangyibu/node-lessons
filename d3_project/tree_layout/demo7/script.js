@@ -8,7 +8,9 @@ var demo7;
         left: 120
     }, width = document.body.offsetWidth / 1 - rectW, height = document.getElementsByClassName('svg-container')[0].offsetHeight / 1 - rectH;
     var zm;
+    var root;
     d3.json('doc.json', function (err, data) {
+        root = data;
         data.x0 = 0;
         data.y0 = 0;
         function collapse(d) {
@@ -34,7 +36,7 @@ var demo7;
     // d3.select("#body").style("height", "800px");
     function updates(source) {
         // Compute the new tree layout.
-        var nodes = tree.nodes(source).reverse(), links = tree.links(nodes);
+        var nodes = tree.nodes(root).reverse(), links = tree.links(nodes);
         // Normalize for fixed-depth.
         nodes.forEach(function (d) {
             d.y = d.depth * 180;
