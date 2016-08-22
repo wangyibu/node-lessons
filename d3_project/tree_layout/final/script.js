@@ -60,6 +60,24 @@ var test;
             .projection(function (d) {
             return [d.y + rectW, d.x + rectH / 2]; // 二次调整 参数
         });
+        var wrap = function (text, width) {
+            text.each(function () {
+                var text = d3.select(this), words = text.text().split(/\s+/).reverse(), word, line = [], lineNumber = 0, lineHeight = 1.1, // ems
+                y = text.attr("y"), dy = parseFloat(text.attr("dy")), tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan").attr("x", function (d) {
+                            return d.textPadding;
+                        }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                    }
+                }
+            });
+        };
         var svg = d3.select("body").append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -221,31 +239,22 @@ var test;
                     var gNode = _node.enter().append('g')
                         .attr('class', 'node')
                         .attr("transform", function (d) {
-                        // d.x0 = o.x(d);
-                        // d.y0 = o.y(d);
                         if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
                             return "translate(" + o.x(nodeData) + "," + (o.y(nodeData) - rectH / 2) + ")";
                         }
                         else {
                             return "translate(" + (o.x(nodeData) - rectW) + "," + (o.y(nodeData) - rectH / 2) + ")";
                         }
-                        // return "translate(" + nodeData.y0 + "," + nodeData.x0 + ")";
                     });
                     var nodeUpdate = _node.transition()
                         .duration(duration)
                         .attr("transform", function (d) {
-                        // d.x0 = o.x(d);
-                        // d.y0 = o.y(d);
                         if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
                             return "translate(" + o.x(d) + "," + (o.y(d) - rectH / 2) + ")";
                         }
                         else {
                             return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
                         }
-                    });
-                    nodes.forEach(function (d) {
-                        d.x0 = d.x;
-                        d.y0 = d.y;
                     });
                     nodes.forEach(function (d) {
                         d.y = d.depth * 100; //  控制每一级别的宽度
@@ -374,32 +383,16 @@ var test;
                     //         return [o.x(d), o.y(d)];
                     //     })
                     // );;
+                    nodes.forEach(function (d) {
+                        d.x0 = d.x;
+                        d.y0 = d.y;
+                    });
                 }
+                // 初始化
                 update(nodeData);
-                // Toggle children on click.
-                // update(node);
-                // update(node);
             });
             // root.children.forEach(collapse);
             // update(root);
         });
-        function wrap(text, width) {
-            text.each(function () {
-                var text = d3.select(this), words = text.text().split(/\s+/).reverse(), word, line = [], lineNumber = 0, lineHeight = 1.1, // ems
-                y = text.attr("y"), dy = parseFloat(text.attr("dy")), tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
-                while (word = words.pop()) {
-                    line.push(word);
-                    tspan.text(line.join(" "));
-                    if (tspan.node().getComputedTextLength() > width) {
-                        line.pop();
-                        tspan.text(line.join(" "));
-                        line = [word];
-                        tspan = text.append("tspan").attr("x", function (d) {
-                            return d.textPadding;
-                        }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                    }
-                }
-            });
-        }
     })(demo2 = test.demo2 || (test.demo2 = {}));
 })(test || (test = {}));

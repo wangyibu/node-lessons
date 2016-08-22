@@ -97,6 +97,31 @@ module test.demo2 {
             return [d.y + rectW, d.x + rectH / 2];  // 二次调整 参数
         });
 
+    var wrap = (text, width) => {
+        text.each(function () {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if ((<SVGTextContentElement>tspan.node()).getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", (d) => {
+                        return d.textPadding;
+                    }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
+            }
+        });
+    }
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -115,6 +140,7 @@ module test.demo2 {
         .attr('width', 200)
         .attr("height", 60)
         .attr("id", "clip1");
+
 
 
     d3.json("doc.json", (error, data) => {
@@ -278,26 +304,19 @@ module test.demo2 {
                 var _node = nodeEnter.selectAll('g.node')
                     .data(nodes);
 
-
-
                 var gNode = _node.enter().append('g')
                     .attr('class', 'node')
                     .attr("transform", (d: IChild) => {
-                        // d.x0 = o.x(d);
-                        // d.y0 = o.y(d);
                         if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
                             return "translate(" + o.x(nodeData) + "," + (o.y(nodeData) - rectH / 2) + ")";
                         } else {
                             return "translate(" + (o.x(nodeData) - rectW) + "," + (o.y(nodeData) - rectH / 2) + ")";
                         }
-                        // return "translate(" + nodeData.y0 + "," + nodeData.x0 + ")";
                     });
 
                 var nodeUpdate = _node.transition()
                     .duration(duration)
                     .attr("transform", (d: IChild) => {
-                        // d.x0 = o.x(d);
-                        // d.y0 = o.y(d);
                         if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
                             return "translate(" + o.x(d) + "," + (o.y(d) - rectH / 2) + ")";
                         } else {
@@ -305,10 +324,7 @@ module test.demo2 {
                         }
                     });
 
-                nodes.forEach((d: any) => {
-                    d.x0 = d.x;
-                    d.y0 = d.y;
-                });
+
 
 
                 nodes.forEach((d) => {
@@ -486,17 +502,14 @@ module test.demo2 {
                 //     })
                 // );;
 
+                nodes.forEach((d: any) => {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
             }
 
-
+            // 初始化
             update(nodeData);
-
-            // Toggle children on click.
-
-
-
-            // update(node);
-            // update(node);
         });
 
 
@@ -504,212 +517,6 @@ module test.demo2 {
         // update(root);
 
     });
-
-
-
-    function wrap(text, width) {
-        text.each(function () {
-            var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.1, // ems
-                y = text.attr("y"),
-                dy = parseFloat(text.attr("dy")),
-                tspan = text.text(null).append("tspan").attr("y", y).attr("dy", dy + "em");
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if ((<SVGTextContentElement>tspan.node()).getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan").attr("x", (d) => {
-                        return d.textPadding;
-                    }).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-                }
-            }
-        });
-    }
-
-    // var update = (source) => {
-
-
-    //     // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
-    //     var nodes = tree.nodes(root),
-    //         links = tree.links(nodes);
-
-    //     // Normalize for fixed-depth.  改变各个层级的距离
-    //     nodes.forEach((d) => {
-    //         //  d.y = d.depth * 180;
-    //         d.y = d.depth * 340;     // translate(180)  0 180 360
-    //     });
-
-    //     // Update the nodes…
-    //     var node = svg.selectAll("g.node")
-    //         .data<any>(nodes, (d) => {
-    //             return d.id || (d.id = ++i);
-    //         });
-
-    //     // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
-    //     var nodeEnter = node.enter().append("g")
-    //         .attr("class", "node")
-    //         .attr("transform", (d) => {
-    //             return "translate(" + source.y0 + "," + source.x0 + ")";
-    //         });
-
-    //     nodeEnter.append('rect')
-    //         .attr("width", rectW)
-    //         .attr("height", rectH)
-    //         .attr("stroke", "#2ab3ed")
-    //         .attr("stroke-width", 1)
-    //         .attr("x", (d) => {
-    //             return d.parent ? 200 - rectW / 2 : rectW / 2;
-    //         })
-    //         .style("fill", "#e8eef7")
-    //         .attr("clip-path", function (d, i) { return "url(#clip1)"; });
-
-    //     nodeEnter.append('rect')
-    //         .attr("width", rectW - 1)
-    //         .attr("height", 20)
-    //         .attr("y", (d) => {
-    //             return 39.5;
-    //         })
-    //         .attr("x", (d) => {
-    //             return d.parent ? 200.5 - rectW / 2 : 0.5 + rectW / 2;
-    //         })
-    //         .style("fill", "#c8dbf7");
-
-    //     nodeEnter.append("text")
-    //         .attr("x", (d) => {
-    //             return d.parent ? 210 - rectW / 2 : 10 + rectW / 2;
-    //         })
-    //         .attr("y", (d) => {
-    //             return rectH - 5;
-    //         })
-    //         .attr("text-anchor", (d) => {
-    //             // return d.children || d._children ? "end" : "start";
-    //             return "start";
-    //         })
-    //         .text((d) => {
-    //             return "页面访问量:34333112";
-    //         })
-    //         .style("fill-opacity", 1e-6);
-
-    //     //添加节点 如果有字节点颜色加深
-    //     nodeEnter.append("circle")
-    //         .attr("cx", (datum, index, outerIndex) => {
-    //             return rectW + rectW / 2;
-    //         })
-    //         .attr("cy", (datum, index, outerIndex) => {
-    //             return rectH / 2;
-    //         })
-    //         .attr("stroke", "black")
-    //         .attr("stroke-width", 1)
-    //         .attr("r", 6)
-    //         .style("fill", function (d) {
-    //             return d._children ? "lightsteelblue" : "#fff";
-    //         })
-    //         .on("click", click);
-
-    //     // 增加文本   节点文字显示左侧还是右侧
-    //     nodeEnter.append("text")
-    //         .attr("x", (d) => {
-    //             // return d.children || d._children ? -10 : 10;
-    //             // return rectW / 2;
-    //             if (d.parent) {
-    //                 d.textPadding = 210 - rectW / 2;
-    //                 return d.textPadding;
-    //             } else {
-    //                 d.textPadding = 10 + rectW / 2;
-    //                 return d.textPadding;
-    //             }
-    //         })
-    //         .attr("y", (d) => {
-    //             return 10;
-    //         })
-    //         .attr("dy", ".55em")
-    //         .attr("text-anchor", (d) => {
-    //             // return d.children || d._children ? "end" : "start";
-    //             return "start";
-    //         })
-    //         .text((d) => {
-    //             return d.name;
-    //         })
-    //         .attr("font-size", (d) => {
-    //             return "10px";
-    //         })
-    //         .call(wrap, 200);
-
-    //     // Transition nodes to their new position.  // 增加动画延时
-    //     var nodeUpdate = node.transition()
-    //         .duration(duration)
-    //         .attr("transform", (d) => {
-    //             return "translate(" + d.y + "," + d.x + ")";
-    //         });
-
-    //     nodeUpdate.select("circle")
-    //         .attr("r", 6)
-    //         .style("fill", (d) => {
-    //             return d._children ? "lightsteelblue" : "#fff";
-    //         });
-    //     // nodeUpdate.select('rect')
-    //     //     .style("fill", (d) => {
-    //     //         return d._children ? "lightsteelblue" : "#fff";
-    //     //     });
-
-    //     nodeUpdate.select("text")
-    //         .style("fill-opacity", 1);
-
-    //     // Transition exiting nodes to the parent's new position.
-    //     var nodeExit = node.exit().transition()
-    //         .duration(duration)
-    //         .attr("transform", (d) => {
-    //             return "translate(" + source.y + "," + source.x + ")";
-    //         })
-    //         .remove();
-
-    //     nodeExit.select("circle")
-    //         .attr("r", 1e-6);
-
-    //     nodeExit.select("text")
-    //         .style("fill-opacity", 1e-6);
-
-    //     // Update the links…
-    //     var link = svg.selectAll("path.link")
-    //         .data<any>(links, (d) => {
-    //             return d.target.id;
-    //         });
-
-    //     // Enter any new links at the parent's previous position.
-    //     link.enter().insert("path", "g")
-    //         .attr("class", "link")
-    //         .attr("d", (d) => {
-    //             var o = { x: source.x0, y: source.y0 };
-    //             return diagonal({ source: o, target: o });
-    //         });
-
-    //     // Transition links to their new position.
-    //     link.transition()
-    //         .duration(duration)
-    //         .attr("d", diagonal);
-
-    //     // Transition exiting nodes to the parent's new position.
-    //     link.exit().transition()
-    //         .duration(duration)
-    //         .attr("d", (d) => {
-    //             var o = { x: source.x, y: source.y };
-    //             return diagonal({ source: o, target: o });
-    //         })
-    //         .remove();
-
-    //     // Stash the old positions for transition.
-    //     nodes.forEach((d: any) => {
-    //         d.x0 = d.x;
-    //         d.y0 = d.y;
-    //     });
-    // }
 
 
 }
