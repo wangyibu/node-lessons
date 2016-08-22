@@ -246,225 +246,252 @@ module test.demo2 {
             // }
             var nodeData = <IChild>mainTree.value;
 
-            console.log(nodeData.orientation);
-
             var nodeEnter = d3.select(this),
                 o = nodeData.option;                // orientation.value  = {size: [height, width], x: function (d) { return d.y; }, y: function (d) { return d.x; }}
+            var tree = d3.layout.tree().nodeSize([100, 200]);// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
+            var click = (d) => {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else {
+                    d.children = d._children;
+                    d._children = null;
+                }
+                update(d);
+            }
 
-            // nodeEnter.append('g')
-            //     .attr('class', "node")
-            //     .attr("transform", (d) => {
-            //         return "translate(" + d.value.y0 + "," + d.value.x0 + ")";
-            //     });
+            function update(nodeData) {
+
+                var nodes = tree.nodes(nodeData).reverse();
+                var links = tree.links(nodes);
+
+                nodeEnter.selectAll(".link")
+                    .data(links)
+                    .enter().append("path")
+                    .attr("class", "link")
+                    .attr("d", d3.svg.diagonal().projection(
+                        function (d) {
+                            return [o.x(d), o.y(d)];
+                        })
+                    );
+
+                var _node = nodeEnter.selectAll('g.node')
+                    .data(nodes);
 
 
 
-            // Compute the layout.
-            //   var tree = d3.layout.tree().size(o.size),
+                var gNode = _node.enter().append('g')
+                    .attr('class', 'node')
+                    .attr("transform", (d: IChild) => {
+                        // d.x0 = o.x(d);
+                        // d.y0 = o.y(d);
+                        if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
+                            return "translate(" + o.x(nodeData) + "," + (o.y(nodeData) - rectH / 2) + ")";
+                        } else {
+                            return "translate(" + (o.x(nodeData) - rectW) + "," + (o.y(nodeData) - rectH / 2) + ")";
+                        }
+                        // return "translate(" + nodeData.y0 + "," + nodeData.x0 + ")";
+                    });
 
-            var tree = d3.layout.tree().nodeSize([100, 200]),// nodeSize  [height,width] height 两个点之间的垂直距离  width ?? 未知
-                nodes = tree.nodes(nodeData),
-                links = tree.links(nodes);
+                var nodeUpdate = _node.transition()
+                    .duration(duration)
+                    .attr("transform", (d: IChild) => {
+                        // d.x0 = o.x(d);
+                        // d.y0 = o.y(d);
+                        if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
+                            return "translate(" + o.x(d) + "," + (o.y(d) - rectH / 2) + ")";
+                        } else {
+                            return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
+                        }
+                    });
 
-            nodeEnter.selectAll(".link")
-                .data(links)
-                .enter().append("path")
-                .attr("class", "link")
-                .attr("d", d3.svg.diagonal().projection(
-                    function (d) {
-                        return [o.x(d), o.y(d)];
+                nodes.forEach((d: any) => {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+
+
+                nodes.forEach((d) => {
+                    d.y = d.depth * 100; //  控制每一级别的宽度
+                })
+
+                // Create the link lines.
+
+                // 最外层框
+                gNode.append('rect')
+                    .attr("width", rectW)
+                    .attr("height", rectH)
+                    .attr("stroke", "#2ab3ed")
+                    .attr("stroke-width", 1)
+                    .style("fill", "#e8eef7")
+                    .attr("class", (d: IChild) => {
+                        if (mainTree.key == 'left') {
+                            return d._children ? 'treeLeftToRightChild' : 'treeLeftToRight';
+                        } else {
+                            return d._children ? 'treeRightToLeftChild' : 'treeRightToLeft';
+                        }
                     })
-                );
+                    .attr("clip-path", function (d, i) { return "url(#clip1)"; });
 
-            var gNode = nodeEnter.selectAll('g.node')
-                .data(nodes)
-                .enter().append('g')
-                .attr('class', 'node')
-                .attr("transform", (d: IChild) => {
-                    d.x0 = o.x(d);
-                    d.y0 = o.y(d);
-                    if ((nodeData.orientation == 'left' && d._children) || (nodeData.orientation == 'right' && d.children)) {
-                        return "translate(" + (o.x(d)) + "," + (o.y(d) - rectH / 2) + ")";
-                    } else {
-                        return "translate(" + (o.x(d) - rectW) + "," + (o.y(d) - rectH / 2) + ")";
-                    }
-                });
-
-
-            nodes.forEach((d) => {
-                d.y = d.depth * 100; //  控制每一级别的宽度
-            })
-
-            // Create the link lines.
-
-            // 最外层框
-            gNode.append('rect')
-                .attr("width", rectW)
-                .attr("height", rectH)
-                .attr("stroke", "#2ab3ed")
-                .attr("stroke-width", 1)
-                .style("fill", "#e8eef7")
-                .attr("class", (d: IChild) => {
-                    if (mainTree.key == 'left') {
-                        return d._children ? 'treeLeftToRightChild' : 'treeLeftToRight';
-                    } else {
-                        return d._children ? 'treeRightToLeftChild' : 'treeRightToLeft';
-                    }
-                })
-                .attr("clip-path", function (d, i) { return "url(#clip1)"; });
-
-            // 文字
-            // 增加文本   节点文字显示左侧还是右侧
-            // gNode.append("text")
-            //     .attr("x", (d: any) => {
-            //         if (mainTree.key == 'left') {
-            //             return d.textPadding = d._children ? d.y + 0.5 : d.y - rectW + 0.5;
-            //         } else {
-            //             var x = o.size[0] + d.y + rectW / 2;
-            //             return d.textPadding = d._children ? x + 0.5 : x + rectW * 2 + 0.5;
-            //         }
-            //     })
-            //     .attr("y", (d) => {
-            //         // return 10;
-            //         return d.x - rectH / 2 + 10;
-            //     })
-            //     .attr("dy", ".55em")
-            //     .attr("text-anchor", (d) => {
-            //         // return d.children || d._children ? "end" : "start";
-            //         return "start";
-            //     })
-            //     .text((d: any) => {
-            //         return d.name;
-            //     })
-            //     .attr("font-size", (d) => {
-            //         return "10px";
-            //     })
-            //     .call(wrap, 200);
-
-          
-
-            
-
-            // nodeUpdate.select("circle")
-            // .attr("r", 6)
-            // .style("fill", (d) => {
-            //     return d._children ? "lightsteelblue" : "#fff";
-            // });
-            var insideGroup = gNode.append('g')
-                .attr("transform", (d: IChild) => {
-                    return "translate(" + 0.5 + "," + 39.5 + ")";
-                });
+                // 文字
+                // 增加文本   节点文字显示左侧还是右侧
+                // gNode.append("text")
+                //     .attr("x", (d: any) => {
+                //         if (mainTree.key == 'left') {
+                //             return d.textPadding = d._children ? d.y + 0.5 : d.y - rectW + 0.5;
+                //         } else {
+                //             var x = o.size[0] + d.y + rectW / 2;
+                //             return d.textPadding = d._children ? x + 0.5 : x + rectW * 2 + 0.5;
+                //         }
+                //     })
+                //     .attr("y", (d) => {
+                //         // return 10;
+                //         return d.x - rectH / 2 + 10;
+                //     })
+                //     .attr("dy", ".55em")
+                //     .attr("text-anchor", (d) => {
+                //         // return d.children || d._children ? "end" : "start";
+                //         return "start";
+                //     })
+                //     .text((d: any) => {
+                //         return d.name;
+                //     })
+                //     .attr("font-size", (d) => {
+                //         return "10px";
+                //     })
+                //     .call(wrap, 200);
 
 
-              // 内部矩形
-            insideGroup.append('rect')
-                .attr("width", rectW-1)
-                .attr("height", 20)
-                // .attr("y",(d)=>{
-                //     return 39.5;
-                // })
-                // .attr("x",0.5)
-                // .attr("x", (d: IChild) => {
-                //     // if (mainTree.key == 'left') {
-                //     //     return d._children ? d.y + 0.5 : d.y - rectW + 0.5;
-                //     // } else {
-                //     //     var x = o.size[0] + d.y + rectW / 2;
-                //     //     return d._children ? x + 0.5 : x + rectW * 2 + 0.5;
-                //     // }
-                //     if (nodeData.orientation == 'left' && d._children) {
-                //         return d.y - rectW / 2;
-                //     } else if (nodeData.orientation == 'right' && d.children) {
-                //         return d.y;
-                //     } else {
-                //         return rectW;
-                //     }
-                // })
-                // .attr("y", (d: IChild) => {
-                //     // return d.x - rectH / 2 + 0.5 + 39;
-                //     return rectH / 2;
-                // })
-                .style("fill", "#c8dbf7");
-            
-            // 内部矩形文字
-            insideGroup.append("text")
-                // .attr("x", (d: IChild) => {
-                //     if (mainTree.key == 'left') {
-                //         return d._children ? d.y + 0.5 : d.y + 0.5 - rectW;
-                //     } else {
-                //         var x = o.size[0] + d.y + rectW / 2;
-                //         return d._children ? x + 0.5 : x + 0.5 + rectW * 2;
-                //     }
-                // })
-                // .attr("y", (d) => {
-                //     return d.x - rectH / 2 + 0.5 + 55;
-                // })
-                .attr('x',3)
-                .attr("dy",15)
-                .attr("text-anchor", (d) => {
-                    return "start";
-                })
-                .text((d) => {
-                    return "页面访问量:34333112";
-                });
-
-            // Create the node circles.
-            gNode.append("circle")
-                .attr("class", "node-point")
-                .attr("r", 4.5)
-                .attr("cx", (d: any) => {
-                    if (nodeData.orientation == 'left' && d._children) {
-                        return d.y - rectW / 2;
-                    } else if (nodeData.orientation == 'right' && d.children) {
-                        return d.y;
-                    } else {
-                        return rectW;
-                    }
-                })
-                .attr("cy", rectH / 2)
-                .style("fill", (d: IChild) => {
-                    return d._children ? "lightsteelblue" : "#fff";
-                })
-                .on('click', click);
-
-            // var nodeUpdate = nodeEnter.transition()
-            //     .duration(duration)
-            //     .attr("transform", (d) => {
-            //         return "translate(" + d.value.y + "," + d.value.x + ")";
-            //     });
-
-            // Create the link lines.
-            // nodeEnter.selectAll(".link")
-            //     .data(links)
-            //     .enter().append("path")
-            //     .attr("class", "link")
-            //     .attr("d", d3.svg.diagonal().projection(
-            //         function (d) {
-            //             return [o.x(d), o.y(d)];
-            //         })
-            //     );
 
 
-            // nodeEnter.selectAll("rect")
-            //     .data(nodes)
-            //     .enter().append('rect')
-            //     .attr("width", rectW)
-            //     .attr("height", rectH)
-            //     .attr("stroke", "#2ab3ed")
-            //     .attr("stroke-width", 1)
-            //     .attr("y", d3.svg.diagonal.projection(function(d)=>{
-            //         o.x(d)
-            //         o.y(d);
-            //     }))
-            //     .attr("x",(d)=>{
-            //         return d.x ? d.x - rectH/2 : rectH/2;
-            //     })
-            //     .style("fill", "#e8eef7")
-            //     .attr("clip-path", function (d, i) { return "url(#clip1)"; });
-            // .attr("d", d3.svg.diagonal().projection(
-            //     function (d) {
-            //         return [o.x(d), o.y(d)];
-            //     })
-            // );;
+
+                // nodeUpdate.select("circle")
+                // .attr("r", 6)
+                // .style("fill", (d) => {
+                //     return d._children ? "lightsteelblue" : "#fff";
+                // });
+                var insideGroup = gNode.append('g')
+                    .attr("transform", (d: IChild) => {
+                        return "translate(" + 0.5 + "," + 39.5 + ")";
+                    });
+
+
+                // 内部矩形
+                insideGroup.append('rect')
+                    .attr("width", rectW - 1)
+                    .attr("height", 20)
+                    // .attr("y",(d)=>{
+                    //     return 39.5;
+                    // })
+                    // .attr("x",0.5)
+                    // .attr("x", (d: IChild) => {
+                    //     // if (mainTree.key == 'left') {
+                    //     //     return d._children ? d.y + 0.5 : d.y - rectW + 0.5;
+                    //     // } else {
+                    //     //     var x = o.size[0] + d.y + rectW / 2;
+                    //     //     return d._children ? x + 0.5 : x + rectW * 2 + 0.5;
+                    //     // }
+                    //     if (nodeData.orientation == 'left' && d._children) {
+                    //         return d.y - rectW / 2;
+                    //     } else if (nodeData.orientation == 'right' && d.children) {
+                    //         return d.y;
+                    //     } else {
+                    //         return rectW;
+                    //     }
+                    // })
+                    // .attr("y", (d: IChild) => {
+                    //     // return d.x - rectH / 2 + 0.5 + 39;
+                    //     return rectH / 2;
+                    // })
+                    .style("fill", "#c8dbf7");
+
+                // 内部矩形文字
+                insideGroup.append("text")
+                    // .attr("x", (d: IChild) => {
+                    //     if (mainTree.key == 'left') {
+                    //         return d._children ? d.y + 0.5 : d.y + 0.5 - rectW;
+                    //     } else {
+                    //         var x = o.size[0] + d.y + rectW / 2;
+                    //         return d._children ? x + 0.5 : x + 0.5 + rectW * 2;
+                    //     }
+                    // })
+                    // .attr("y", (d) => {
+                    //     return d.x - rectH / 2 + 0.5 + 55;
+                    // })
+                    .attr('x', 3)
+                    .attr("dy", 15)
+                    .attr("text-anchor", (d) => {
+                        return "start";
+                    })
+                    .text((d) => {
+                        return "页面访问量:34333112";
+                    });
+
+                // Create the node circles.
+                gNode.append("circle")
+                    .attr("class", "node-point")
+                    .attr("r", 4.5)
+                    .attr("cx", (d: any) => {
+                        if (nodeData.orientation == 'left' && d._children) {  // leftToRight tree
+                            return d.y - rectW / 2;
+                        } else if (nodeData.orientation == 'right' && d.children) { // rightToLeft tree
+                            return d.y;
+                        } else {
+                            return rectW;
+                        }
+                    })
+                    .attr("cy", rectH / 2)
+                    .style("fill", (d: IChild) => {
+                        return d._children ? "lightsteelblue" : "#fff";
+                    })
+                    .on('click', click);
+
+                // var nodeUpdate = nodeEnter.transition()
+                //     .duration(duration)
+                //     .attr("transform", (d) => {
+                //         return "translate(" + d.value.y + "," + d.value.x + ")";
+                //     });
+
+                // Create the link lines.
+                // nodeEnter.selectAll(".link")
+                //     .data(links)
+                //     .enter().append("path")
+                //     .attr("class", "link")
+                //     .attr("d", d3.svg.diagonal().projection(
+                //         function (d) {
+                //             return [o.x(d), o.y(d)];
+                //         })
+                //     );
+
+
+                // nodeEnter.selectAll("rect")
+                //     .data(nodes)
+                //     .enter().append('rect')
+                //     .attr("width", rectW)
+                //     .attr("height", rectH)
+                //     .attr("stroke", "#2ab3ed")
+                //     .attr("stroke-width", 1)
+                //     .attr("y", d3.svg.diagonal.projection(function(d)=>{
+                //         o.x(d)
+                //         o.y(d);
+                //     }))
+                //     .attr("x",(d)=>{
+                //         return d.x ? d.x - rectH/2 : rectH/2;
+                //     })
+                //     .style("fill", "#e8eef7")
+                //     .attr("clip-path", function (d, i) { return "url(#clip1)"; });
+                // .attr("d", d3.svg.diagonal().projection(
+                //     function (d) {
+                //         return [o.x(d), o.y(d)];
+                //     })
+                // );;
+
+            }
+
+
+            update(nodeData);
+
+            // Toggle children on click.
 
 
 
@@ -506,193 +533,183 @@ module test.demo2 {
         });
     }
 
-    var update = (source) => {
+    // var update = (source) => {
 
 
-        // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
-        var nodes = tree.nodes(root),
-            links = tree.links(nodes);
+    //     // Compute the new tree layout. 计算父布局并返回一组节点 / 计算树节点的父-子连接。
+    //     var nodes = tree.nodes(root),
+    //         links = tree.links(nodes);
 
-        // Normalize for fixed-depth.  改变各个层级的距离
-        nodes.forEach((d) => {
-            //  d.y = d.depth * 180;
-            d.y = d.depth * 340;     // translate(180)  0 180 360
-        });
+    //     // Normalize for fixed-depth.  改变各个层级的距离
+    //     nodes.forEach((d) => {
+    //         //  d.y = d.depth * 180;
+    //         d.y = d.depth * 340;     // translate(180)  0 180 360
+    //     });
 
-        // Update the nodes…
-        var node = svg.selectAll("g.node")
-            .data<any>(nodes, (d) => {
-                return d.id || (d.id = ++i);
-            });
+    //     // Update the nodes…
+    //     var node = svg.selectAll("g.node")
+    //         .data<any>(nodes, (d) => {
+    //             return d.id || (d.id = ++i);
+    //         });
 
-        // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
-        var nodeEnter = node.enter().append("g")
-            .attr("class", "node")
-            .attr("transform", (d) => {
-                return "translate(" + source.y0 + "," + source.x0 + ")";
-            });
+    //     // Enter any new nodes at the parent's previous position.  操作之后移动横纵坐标的位置 绑定click事件
+    //     var nodeEnter = node.enter().append("g")
+    //         .attr("class", "node")
+    //         .attr("transform", (d) => {
+    //             return "translate(" + source.y0 + "," + source.x0 + ")";
+    //         });
 
-        nodeEnter.append('rect')
-            .attr("width", rectW)
-            .attr("height", rectH)
-            .attr("stroke", "#2ab3ed")
-            .attr("stroke-width", 1)
-            .attr("x", (d) => {
-                return d.parent ? 200 - rectW / 2 : rectW / 2;
-            })
-            .style("fill", "#e8eef7")
-            .attr("clip-path", function (d, i) { return "url(#clip1)"; });
+    //     nodeEnter.append('rect')
+    //         .attr("width", rectW)
+    //         .attr("height", rectH)
+    //         .attr("stroke", "#2ab3ed")
+    //         .attr("stroke-width", 1)
+    //         .attr("x", (d) => {
+    //             return d.parent ? 200 - rectW / 2 : rectW / 2;
+    //         })
+    //         .style("fill", "#e8eef7")
+    //         .attr("clip-path", function (d, i) { return "url(#clip1)"; });
 
-        nodeEnter.append('rect')
-            .attr("width", rectW - 1)
-            .attr("height", 20)
-            .attr("y", (d) => {
-                return 39.5;
-            })
-            .attr("x", (d) => {
-                return d.parent ? 200.5 - rectW / 2 : 0.5 + rectW / 2;
-            })
-            .style("fill", "#c8dbf7");
+    //     nodeEnter.append('rect')
+    //         .attr("width", rectW - 1)
+    //         .attr("height", 20)
+    //         .attr("y", (d) => {
+    //             return 39.5;
+    //         })
+    //         .attr("x", (d) => {
+    //             return d.parent ? 200.5 - rectW / 2 : 0.5 + rectW / 2;
+    //         })
+    //         .style("fill", "#c8dbf7");
 
-        nodeEnter.append("text")
-            .attr("x", (d) => {
-                return d.parent ? 210 - rectW / 2 : 10 + rectW / 2;
-            })
-            .attr("y", (d) => {
-                return rectH - 5;
-            })
-            .attr("text-anchor", (d) => {
-                // return d.children || d._children ? "end" : "start";
-                return "start";
-            })
-            .text((d) => {
-                return "页面访问量:34333112";
-            })
-            .style("fill-opacity", 1e-6);
+    //     nodeEnter.append("text")
+    //         .attr("x", (d) => {
+    //             return d.parent ? 210 - rectW / 2 : 10 + rectW / 2;
+    //         })
+    //         .attr("y", (d) => {
+    //             return rectH - 5;
+    //         })
+    //         .attr("text-anchor", (d) => {
+    //             // return d.children || d._children ? "end" : "start";
+    //             return "start";
+    //         })
+    //         .text((d) => {
+    //             return "页面访问量:34333112";
+    //         })
+    //         .style("fill-opacity", 1e-6);
 
-        //添加节点 如果有字节点颜色加深
-        nodeEnter.append("circle")
-            .attr("cx", (datum, index, outerIndex) => {
-                return rectW + rectW / 2;
-            })
-            .attr("cy", (datum, index, outerIndex) => {
-                return rectH / 2;
-            })
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
-            .attr("r", 6)
-            .style("fill", function (d) {
-                return d._children ? "lightsteelblue" : "#fff";
-            })
-            .on("click", click);
+    //     //添加节点 如果有字节点颜色加深
+    //     nodeEnter.append("circle")
+    //         .attr("cx", (datum, index, outerIndex) => {
+    //             return rectW + rectW / 2;
+    //         })
+    //         .attr("cy", (datum, index, outerIndex) => {
+    //             return rectH / 2;
+    //         })
+    //         .attr("stroke", "black")
+    //         .attr("stroke-width", 1)
+    //         .attr("r", 6)
+    //         .style("fill", function (d) {
+    //             return d._children ? "lightsteelblue" : "#fff";
+    //         })
+    //         .on("click", click);
 
-        // 增加文本   节点文字显示左侧还是右侧
-        nodeEnter.append("text")
-            .attr("x", (d) => {
-                // return d.children || d._children ? -10 : 10;
-                // return rectW / 2;
-                if (d.parent) {
-                    d.textPadding = 210 - rectW / 2;
-                    return d.textPadding;
-                } else {
-                    d.textPadding = 10 + rectW / 2;
-                    return d.textPadding;
-                }
-            })
-            .attr("y", (d) => {
-                return 10;
-            })
-            .attr("dy", ".55em")
-            .attr("text-anchor", (d) => {
-                // return d.children || d._children ? "end" : "start";
-                return "start";
-            })
-            .text((d) => {
-                return d.name;
-            })
-            .attr("font-size", (d) => {
-                return "10px";
-            })
-            .call(wrap, 200);
+    //     // 增加文本   节点文字显示左侧还是右侧
+    //     nodeEnter.append("text")
+    //         .attr("x", (d) => {
+    //             // return d.children || d._children ? -10 : 10;
+    //             // return rectW / 2;
+    //             if (d.parent) {
+    //                 d.textPadding = 210 - rectW / 2;
+    //                 return d.textPadding;
+    //             } else {
+    //                 d.textPadding = 10 + rectW / 2;
+    //                 return d.textPadding;
+    //             }
+    //         })
+    //         .attr("y", (d) => {
+    //             return 10;
+    //         })
+    //         .attr("dy", ".55em")
+    //         .attr("text-anchor", (d) => {
+    //             // return d.children || d._children ? "end" : "start";
+    //             return "start";
+    //         })
+    //         .text((d) => {
+    //             return d.name;
+    //         })
+    //         .attr("font-size", (d) => {
+    //             return "10px";
+    //         })
+    //         .call(wrap, 200);
 
-        // Transition nodes to their new position.  // 增加动画延时
-        var nodeUpdate = node.transition()
-            .duration(duration)
-            .attr("transform", (d) => {
-                return "translate(" + d.y + "," + d.x + ")";
-            });
+    //     // Transition nodes to their new position.  // 增加动画延时
+    //     var nodeUpdate = node.transition()
+    //         .duration(duration)
+    //         .attr("transform", (d) => {
+    //             return "translate(" + d.y + "," + d.x + ")";
+    //         });
 
-        nodeUpdate.select("circle")
-            .attr("r", 6)
-            .style("fill", (d) => {
-                return d._children ? "lightsteelblue" : "#fff";
-            });
-        // nodeUpdate.select('rect')
-        //     .style("fill", (d) => {
-        //         return d._children ? "lightsteelblue" : "#fff";
-        //     });
+    //     nodeUpdate.select("circle")
+    //         .attr("r", 6)
+    //         .style("fill", (d) => {
+    //             return d._children ? "lightsteelblue" : "#fff";
+    //         });
+    //     // nodeUpdate.select('rect')
+    //     //     .style("fill", (d) => {
+    //     //         return d._children ? "lightsteelblue" : "#fff";
+    //     //     });
 
-        nodeUpdate.select("text")
-            .style("fill-opacity", 1);
+    //     nodeUpdate.select("text")
+    //         .style("fill-opacity", 1);
 
-        // Transition exiting nodes to the parent's new position.
-        var nodeExit = node.exit().transition()
-            .duration(duration)
-            .attr("transform", (d) => {
-                return "translate(" + source.y + "," + source.x + ")";
-            })
-            .remove();
+    //     // Transition exiting nodes to the parent's new position.
+    //     var nodeExit = node.exit().transition()
+    //         .duration(duration)
+    //         .attr("transform", (d) => {
+    //             return "translate(" + source.y + "," + source.x + ")";
+    //         })
+    //         .remove();
 
-        nodeExit.select("circle")
-            .attr("r", 1e-6);
+    //     nodeExit.select("circle")
+    //         .attr("r", 1e-6);
 
-        nodeExit.select("text")
-            .style("fill-opacity", 1e-6);
+    //     nodeExit.select("text")
+    //         .style("fill-opacity", 1e-6);
 
-        // Update the links…
-        var link = svg.selectAll("path.link")
-            .data<any>(links, (d) => {
-                return d.target.id;
-            });
+    //     // Update the links…
+    //     var link = svg.selectAll("path.link")
+    //         .data<any>(links, (d) => {
+    //             return d.target.id;
+    //         });
 
-        // Enter any new links at the parent's previous position.
-        link.enter().insert("path", "g")
-            .attr("class", "link")
-            .attr("d", (d) => {
-                var o = { x: source.x0, y: source.y0 };
-                return diagonal({ source: o, target: o });
-            });
+    //     // Enter any new links at the parent's previous position.
+    //     link.enter().insert("path", "g")
+    //         .attr("class", "link")
+    //         .attr("d", (d) => {
+    //             var o = { x: source.x0, y: source.y0 };
+    //             return diagonal({ source: o, target: o });
+    //         });
 
-        // Transition links to their new position.
-        link.transition()
-            .duration(duration)
-            .attr("d", diagonal);
+    //     // Transition links to their new position.
+    //     link.transition()
+    //         .duration(duration)
+    //         .attr("d", diagonal);
 
-        // Transition exiting nodes to the parent's new position.
-        link.exit().transition()
-            .duration(duration)
-            .attr("d", (d) => {
-                var o = { x: source.x, y: source.y };
-                return diagonal({ source: o, target: o });
-            })
-            .remove();
+    //     // Transition exiting nodes to the parent's new position.
+    //     link.exit().transition()
+    //         .duration(duration)
+    //         .attr("d", (d) => {
+    //             var o = { x: source.x, y: source.y };
+    //             return diagonal({ source: o, target: o });
+    //         })
+    //         .remove();
 
-        // Stash the old positions for transition.
-        nodes.forEach((d: any) => {
-            d.x0 = d.x;
-            d.y0 = d.y;
-        });
-    }
+    //     // Stash the old positions for transition.
+    //     nodes.forEach((d: any) => {
+    //         d.x0 = d.x;
+    //         d.y0 = d.y;
+    //     });
+    // }
 
-    // Toggle children on click.
-    var click = (d) => {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        } else {
-            d.children = d._children;
-            d._children = null;
-        }
-        update(d);
-    }
+
 }
