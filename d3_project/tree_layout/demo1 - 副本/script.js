@@ -34,9 +34,7 @@ var test;
             // Compute the new tree layout.
             var nodes = tree.nodes(root).reverse(), links = tree.links(nodes);
             // Normalize for fixed-depth.
-            nodes.forEach(function (d) {
-                d.y = d.depth * 180;
-            });
+            nodes.forEach(function (d) { d.y = d.depth * 180; });
             // Update the nodes…
             var node = svg.selectAll("g.node")
                 .data(nodes, function (d) { return d.id || (d.id = ++i); });
@@ -48,6 +46,12 @@ var test;
             nodeEnter.append("circle")
                 .attr("r", 1e-6)
                 .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
+            nodeEnter.append("text")
+                .attr("x", function (d) { return d.children || d._children ? -10 : 10; })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
+                .text(function (d) { return d.name; })
+                .style("fill-opacity", 1e-6);
             // Transition nodes to their new position.
             var nodeUpdate = node.transition()
                 .duration(duration)
@@ -55,8 +59,8 @@ var test;
             nodeUpdate.select("circle")
                 .attr("r", 4.5)
                 .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
-            // nodeUpdate.select("text")
-            //   .style("fill-opacity", 1);
+            nodeUpdate.select("text")
+                .style("fill-opacity", 1);
             // Transition exiting nodes to the parent's new position.
             var nodeExit = node.exit().transition()
                 .duration(duration)

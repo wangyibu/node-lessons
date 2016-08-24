@@ -168,7 +168,7 @@ module test.demo2 {
 
 
         // Normalize for fixed-depth.  改变各个层级的距离
-        nodes.forEach((d) => {
+        nodes.forEach((d:any) => {
             //  d.y = d.depth * 180;
             d.y = d.depth * 340;     // translate(180)  0 180 360
             d.y0 = rectW/2;
