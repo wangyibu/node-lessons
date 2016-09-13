@@ -1,11 +1,20 @@
-GET https://avatars3.githubusercontent.com/u/14134768?v=3&s=40 HTTP/1.1
-Accept:image/webp,image/*,*/*;q=0.8
-Accept-Encoding:gzip, deflate, sdch, br
-Accept-Language:zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4
-Cache-Control:max-age=0
-Connection:keep-alive
-Host:avatars3.githubusercontent.com
-If-Modified-Since:Sat, 05 Sep 2015 04:11:52 GMT
-If-None-Match:"c00fae92323fa6d527afa0d0e48c76be785c753f"
-Referer:https://github.com/
-User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+POST http://localhost:63934/api/3.0.0-beta/usergroup/queryUserGroup 
+Host: localhost:63934
+Connection: keep-alive
+Content-Length: 32
+Accept: application/json,text/plain,*/*
+Origin: http://localhost:63934
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Referer: http://localhost:63934/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4
+Cookie: X-Gridsum-FullTicketId=TGT-9868-LoKqcSyKZjqfWH19RzchUGNAcFRLKTsUzj4bQeyoqRjpUcaxqL-x-gridsumdissector; .AspNetCore.Session=CfDJ8JYbJJ8WoRdCnQYcFbveVPxNDVHMU7JAsgk%2BYCmLBFcVPxLDV3twdYCVbPss1Lda333js3BT81KyM3%2BSljAQuQDrUhes1%2Fm1AOqFRMP3w4RRJt%2FKhqszOEFOW7q5jaPzHETjsBNnvtUM5Mk3ZNa4%2FJsyben9CYM3zIQA9MKz1%2B1H; _gscu_334684783=707244413c20kl56; _gscs_334684783=t72619969w9jwnt96|pv:17; _gscbrs_334684783=1; X-Gridsum-FullTicketId=TGT-9868-LoKqcSyKZjqfWH19RzchUGNAcFRLKTsUzj4bQeyoqRjpUcaxqL-x-gridsumdissector; .AspNetCore.Session=CfDJ8JYbJJ8WoRdCnQYcFbveVPwebar5H1DmDQJePwYeU%2BRXUJ2qFloUAU%2BeLwEhS%2FZh%2BSkm8YBZ7kn4Gt2gpAcThEhvD0YCsvFe5qm7iWo91%2BAwXO2bcfljZr5pTmYEq48fQzWvBOk5PpUeZ7OSJ3F4K9sPnEAa%2BYpeI8b2X4ayNp7p; _gscu_334684783=707244413c20kl56; _gscs_334684783=t72619969w9jwnt96|pv:21; _gscbrs_334684783=1
+
+
+<request>
+    <name>Culture</name>
+    <value>cn</time>
+    <name>ProfileId</name>
+    <value>702</time>
+</request>

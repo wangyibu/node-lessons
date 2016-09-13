@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body style="height:8000px;">
+    <script>
+        var k = 1;
+        var scrollRange = document.documentElement.clientHeight;
+        function checkWindowBottom(){
+            window.scrollTo(scrollRange*(k-1),scrollRange*(k));
+            k++;
+            if(!((document.body.scrollHeight - document.body.scrollTop) <= document.documentElement.clientHeight)){
+                checkWindowBottom();
+            }else{
+                alert("到达底部");
+            }
+
+        }
+        checkWindowBottom();
+        
+
+    </script>
+</body>
+
+</html>

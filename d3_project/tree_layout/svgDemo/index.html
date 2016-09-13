@@ -4,42 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <script src="/bower_components/d3/d3.js"></script>
     <style>
         *{
             margin:0;
             padding:0;
         }
-        .pre:hover{
-            fill:green;
-        }
-        .next:hover{
-            fill:green;
+        .pre:hover,.next:hover{
+            cursor: pointer;
+            fill:red;
         }
         </style>
 </head>
 
 <body>
-    <svg width="1200" height="1200" >
+    <svg width="400" height="300" viewBox="0 0 400 300">
         <defs>
             <clipPath id="clipPath4">
-                <rect x="0" y="0" width="400" height="300" />
+                <!--<rect x="0" y="0" width="400" height="300" />-->
+                <ellipse cx="200" cy="150" rx="200" ry="150" >
             </clipPath>
         </defs>
-        <circle cx="10" cy="10" r="2" stroke="red" stroke-width="2" fill="red" />
-        <circle cx="410" cy="310" r="2" stroke="red" stroke-width="2" fill="red" />
-
-        <g style="clip-path: url(#clipPath4);" transform="translate(10,10)">
+        <g style="clip-path: url(#clipPath4);">
             <!--<rect x="5" y="5" width="190" height="90" style="stroke: none; fill:#00ff00;" />
-
             <circle cx="20" cy="20" r="20" style="stroke: none; fill: #ff0000;" />-->
-            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="1.gif" width="400" height="300" x="200"></image>
-            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="2.png" width="400" height="300" x="-200"></image>
-            <circle cx="10" cy="150" r="5" stroke="#ddd" stroke-width="2" fill-opacity="0"  class="pre"/>
-            <circle cx="390" cy="150" r="5" stroke="#ddd" stroke-width="2" fill-opacity="0" class="next"/>
+            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="1.gif" width="400" height="300" x="0"></image>
+            <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="2.png" width="400" height="300" x="400"></image>
+            <polyline points="0,15  15,0  15,30" fill="#eee" class="pre" transform="translate(10,135)" ></polyline>
+            <polyline points="0,0  15,15  0,30" fill="#eee" class="next" transform="translate(375,135)" ></polyline>
+            <!--<circle cx="10" cy="150" r="5" stroke="#ddd" stroke-width="2" fill-opacity="0"  class="pre"/>
+            <circle cx="390" cy="150" r="5" stroke="#ddd" stroke-width="2" fill-opacity="0" class="next"/>-->
         </g>
         <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="2.png" width="400" height="300" x="10" y="600"></image>
     </svg>
+    <script>
+        d3.select('.pre').on('click',function(){
+            d3.selectAll('image').data([-400,0]).transition().attr('x',function(d,index){
+                  return d + 400;
+            });
+        });
+        d3.select('.next').on('click',function(){
+            d3.selectAll('image').data([0,400]).transition().attr('x',function(d,index){
+                  return d - 400;
+            });
+        });
 
+    </script>
 </body>
 
 </html>
