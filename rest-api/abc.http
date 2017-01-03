@@ -1,0 +1,16 @@
+POST http://localhost:63934/api/3.0.0-beta/drilldown/canQueryMembers HTTP/1.1
+Host: localhost:63934
+Connection: keep-alive
+Content-Length: 43
+Pragma: no-cache
+Cache-Control: no-cache
+Accept: application/json, text/plain, */*
+Origin: http://localhost:63934
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Referer: http://localhost:63934/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4
+Cookie: _gscu_1682547156=79894549rlday341; X-Gridsum-FullTicketId=TGT-129556-YIJFtmsmxUNJKDRxocoxQ0Rc4taRGUiEVtkRVIm1mxvVUdM0Na-x-gridsumdissector; .AspNetCore.Session=CfDJ8APYMulcrhpCoC8xd9%2FZkS00jWSLd4KGD9CMS8rUjN5FrvCdwzk%2BDLYx9fYtS40f%2Fqwp5t6WNoAXeFzkcG7m%2FXYwvzxYuoLPxFd2GGqSlRT2mb3OuMSMfNWa4vnzWp4LPF2oVbpOEj2%2FJCoQoAtHboPUFsFFHIBiAD0f4igsJiH5; _gscu_334684783=81093872qpxlu214; _gscs_334684783=t818797510tjk1014|pv:143; _gscbrs_334684783=1
+
+{"ProfileId":2215,"ViewportId":"IsBounced"}

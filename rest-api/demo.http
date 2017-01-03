@@ -1,4 +1,4 @@
-POST http://localhost:63934/api/3.0.0-beta/usergroup/queryUserGroup 
+POST http://localhost:63934/api/3.0.0-beta/usergroup/queryUserGroup
 Host: localhost:63934
 Connection: keep-alive
 Content-Length: 32

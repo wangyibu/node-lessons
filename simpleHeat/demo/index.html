@@ -8,11 +8,11 @@
             text-align: center;
             font: 16px/1.4 "Helvetica Neue", Arial, sans-serif;
         }
-        
+
         a {
             color: #0077ff;
         }
-        
+
         .container {
             width: 1000px;
             height: 600px;
@@ -20,7 +20,7 @@
             position: relative;
             border: 1px solid #ccc;
         }
-        
+
         .options {
             position: absolute;
             top: 0;
@@ -31,11 +31,11 @@
             border-left: 1px solid #ccc;
             line-height: 1;
         }
-        
+
         .options input {
             width: 200px;
         }
-        
+
         .options label {
             width: 60px;
             float: left;
@@ -43,7 +43,7 @@
             margin-right: 10px;
             color: #555;
         }
-        
+
         .ghbtns {
             position: relative;
             top: 4px;
@@ -58,38 +58,38 @@
             <label>Radius </label><input type="range" id="radius" value="25" min="10" max="50" /><br />
             <label>Blur </label><input type="range" id="blur" value="15" min="10" max="50" />
         </div>
-        <canvas id="canvas" width="1000" height="600"></canvas>
+        <canvas id="canvas" width="1600" height="30000"></canvas>
     </div>
 
     <script src="../simpleheat.js"></script>
     <script src="data.js"></script>
     <script>
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-function get(id) {
-    return document.getElementById(id);
-}
-var heat = simpleheat('canvas').data(data).max(18),
-    frame;
-function draw() {
-    console.time('draw');
-    heat.draw();
-    console.timeEnd('draw');
-    frame = null;
-}
-draw();
-get('canvas').onmouseup = function (e) {
-    heat.add([e.layerX, e.layerY, 1]);
-    frame = frame || window.requestAnimationFrame(draw);
-};
-var radius = get('radius'),
-    blur = get('blur'),
-    changeType = 'oninput' in radius ? 'oninput' : 'onchange';
-radius[changeType] = blur[changeType] = function (e) {
-    heat.radius(+radius.value, +blur.value);
-    frame = frame || window.requestAnimationFrame(draw);
-};
-</script>
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        function get(id) {
+            return document.getElementById(id);
+        }
+        var heat = simpleheat('canvas').data(data).max(18),
+            frame;
+        function draw() {
+            console.time('draw');
+            heat.draw();
+            console.timeEnd('draw');
+            frame = null;
+        }
+        draw();
+        get('canvas').onmouseup = function (e) {
+            heat.add([e.layerX, e.layerY, 1]);
+            frame = frame || window.requestAnimationFrame(draw);
+        };
+        var radius = get('radius'),
+            blur = get('blur'),
+            changeType = 'oninput' in radius ? 'oninput' : 'onchange';
+        radius[changeType] = blur[changeType] = function (e) {
+            heat.radius(+radius.value, +blur.value);
+            frame = frame || window.requestAnimationFrame(draw);
+        };
+    </script>
 </body>
 
 </html>

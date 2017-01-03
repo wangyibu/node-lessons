@@ -62,7 +62,8 @@ simpleheat.prototype = {
         ctx.shadowColor = 'black';
 
         ctx.beginPath();
-        ctx.arc(-r2, -r2, r, 0, Math.PI * 2, true);
+        // 绘制一个灰度圆 cx,cy,r ,起始角度,结束角度
+        ctx.arc(-r2, -r2, r, 0, Math.PI * 2);
         ctx.closePath();
         ctx.fill();
 
@@ -130,7 +131,7 @@ simpleheat.prototype = {
         }
     },
 
-    _createCanvas:function() {
+    _createCanvas: function () {
         if (typeof document !== 'undefined') {
             return document.createElement('canvas');
         } else {
